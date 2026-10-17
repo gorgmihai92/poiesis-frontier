@@ -23,8 +23,9 @@ experiments produce new data, which insight then reads.
 
 1. **Start from what was tested** (see "Input" below). Say what the starting points are and how each was tested.
    If there are none, the user's question is the start, and its premise becomes the first assumption to test.
-   Answer on your own; where research (a premise nobody checked) or insight (data or scenarios to start from)
-   would make the concepts more accurate, say which and why in one line.
+   Answer on your own; where [poiesis-research](https://github.com/gorgmihai92/poiesis-research) (a premise nobody checked) or
+   [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) (data or scenarios to start from) would make the concepts more accurate,
+   say which and why in one line, with the link.
 2. **Frame** with `playbooks/frame.md`: what kind of problem it is decides whether frontier fits and how big the
    experiments are.
 3. **Generate** with one or more method playbooks. A request may combine them (e.g. first principles, then a
@@ -80,11 +81,13 @@ This plugin works alone. Suggest another one only when it would change the resul
 on without it if the user says no (say what was left out). Check with `claude plugin list`; install only after
 the user agrees, with `claude plugin marketplace add gorgmihai92/<repo>` and then
 `claude plugin install <plugin>@<repo>` (it works after Claude Code restarts).
-- **poiesis-research** (repo `poiesis-research`): when a concept rests on a factual premise nobody has checked.
-- **poiesis-insight** (repo `poiesis-insight`): when the question rests on data with no tested starting points yet,
+Every suggestion, from the skill or an agent, gives the plugin's link (below) and names the skill or agent
+to use, e.g. "[poiesis-insight](https://github.com/gorgmihai92/poiesis-insight), `foresight-analyst`".
+- **[poiesis-research](https://github.com/gorgmihai92/poiesis-research)**: when a concept rests on a factual premise nobody has checked.
+- **[poiesis-insight](https://github.com/gorgmihai92/poiesis-insight)**: when the question rests on data with no tested starting points yet,
   and to interpret experiment results.
-- **poiesis-ui** (repo `poiesis-design`): to build a concept that survived its experiment: how it looks.
-- **poiesis-ux** (repo `poiesis-design`): the same: how it behaves; its tester walks the prototype.
+- **poiesis-ui** ([poiesis-design](https://github.com/gorgmihai92/poiesis-design)): to build a concept that survived its experiment: how it looks.
+- **poiesis-ux** ([poiesis-design](https://github.com/gorgmihai92/poiesis-design)): the same: how it behaves; its tester walks the prototype.
 
 ## Files shared with other Poiesis plugins
 These paths and fields are a contract between the Poiesis plugins: rename or remove one only in a major version,

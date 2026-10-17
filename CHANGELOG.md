@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+- Suggestions of another Poiesis plugin, from the skill or its agents, give the plugin's link and name the skill or
+  agent to use.
+
 ## 1.1.3
 - Convincing is not evidence: no invented specifics to persuade; each comes from a source or is marked "invented
   for the artefact". Concepts ranked by what their test would teach, not by appeal.
