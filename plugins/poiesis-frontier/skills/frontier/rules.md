@@ -1,5 +1,19 @@
 # Rules (every playbook)
 
+## Depth
+Some rules hold at every depth; the rest are defaults, scaled to what is at stake. The user picks the depth, or the
+project's `research.config.md` sets it (`Depth:`); otherwise **standard**.
+- **Always:** no conclusions; each concept's assumption and kill criterion fixed before anything runs; no harm, and
+  anything with personal data, money or a public release only proposed; nothing invented.
+- **Quick:** one method, up to three concepts, each with its assumption, smallest experiment and kill criterion.
+- **Standard:** frame, the methods that fit, and the full experiment playbook.
+- **Thorough:** several methods, and the experiments designed by the independent `experimentalist` agent, given the
+  concepts and starting points but not the reasoning.
+
+A default may be skipped at any depth if the report says which one and why. Every report ends with **Not
+checked:** what was skipped, or "nothing". Generating has no limit but harm: these rules apply to what is claimed
+and to experiments, never to what may be imagined.
+
 ## No conclusions
 Frontier proposes; it never concludes. A concept is a hypothesis about what could work or what could be true, not a
 finding. Words like "shows", "proves" or "the answer is" do not appear in a concept; "if …, then …" does.

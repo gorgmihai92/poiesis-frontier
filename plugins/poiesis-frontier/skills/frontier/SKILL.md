@@ -28,8 +28,8 @@ experiments produce new data, which insight then reads.
 3. **Generate** with one or more method playbooks. A request may combine them (e.g. first principles, then a
    reversal of the assumption that is left).
 4. **Every concept goes through `playbooks/experiment.md`** before it is reported: the assumption it tests, the
-   smallest experiment that could prove it wrong, and what would kill it, written before anything runs. For
-   independent experiment design, or several concepts at once, use the `experimentalist` agent; give it the
+   smallest experiment that could prove it wrong, and what would kill it, written before anything runs. At
+   thorough depth (rules.md, "Depth"), or for many concepts at once, use the `experimentalist` agent; give it the
    concepts and the starting points, not the reasoning that produced them.
 5. **Follow `rules.md`**, the same for every playbook.
 
@@ -60,3 +60,20 @@ Check the log with `python3 -I $S/experiments.py frontier/experiments.md`: open,
 inconclusive, and rows missing a kill criterion or with a kill criterion written after the start.
 Scripts are in `${CLAUDE_SKILL_DIR}/scripts` (called `$S`; if that path does not exist, Glob for
 `**/frontier/scripts/experiments.py` under `~/.claude`). They need only Python 3; run them with `python3 -I`.
+
+## Answers
+Short and direct: the answer first, then what it rests on, in bullets or a table; no preamble, no recap. The full
+work goes in the saved file; the chat gets the summary, the "Not checked" line and the file's path. Use an agent
+only for independent parts that can run in parallel, or for the independent check at thorough depth; otherwise
+work inline.
+
+## Other Poiesis plugins
+This plugin works alone. Suggest another one only when it would change the result: once, in one line, and go
+on without it if the user says no (say what was left out). Check with `claude plugin list`; install only after
+the user agrees, with `claude plugin marketplace add gorgmihai92/<repo>` and then
+`claude plugin install <plugin>@<repo>` (it works after Claude Code restarts).
+- **poiesis-research** (repo `poiesis-research`): when a concept rests on a factual premise nobody has checked.
+- **poiesis-insight** (repo `poiesis-insight`): when the question rests on data with no tested starting points yet,
+  and to interpret experiment results.
+- **poiesis-ui** (repo `poiesis-design`): to build a concept that survived its experiment: how it looks.
+- **poiesis-ux** (repo `poiesis-design`): the same: how it behaves; its tester walks the prototype.

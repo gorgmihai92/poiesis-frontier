@@ -17,3 +17,7 @@ project.
 
 Return, for each concept: the assumption, the prediction, the smallest experiment, the kill criterion and what would be
 inconclusive, the safe-to-fail note, and the verdict (ready / sharpen / not testable yet) with one line of reason.
+
+Answer in under 100 words per concept, the verdict first; end with **Not checked:** what you skipped. If a concept
+needs another Poiesis plugin (a premise to check: poiesis-research; results to interpret: poiesis-insight), say so
+in one line; do not do its work.

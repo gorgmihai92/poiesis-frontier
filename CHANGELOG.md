@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0
+- Depth: quick, standard (default) or thorough, per request or `Depth:` in `research.config.md`. A few rules hold
+  at every depth; the rest are defaults, skippable if the report says why. Every report ends with "Not checked".
+  Rules limit what is reported as true, never what may be explored.
+- The `experimentalist` agent runs at thorough depth or for many concepts; otherwise the playbook runs inline.
+- Answers short and direct, the answer first; agents only for independent parallel parts or the thorough check;
+  each agent has a word limit.
+- "Other Poiesis plugins": when another one would change the result, Claude suggests it once and installs it only
+  if the user agrees.
+- README: the four toolkits, their roles, agents, what each reads and leaves, and how they connect.
+
 ## 1.0.0
 - `frontier` skill: starts from what poiesis-insight kept, foresight scenarios and research gaps; never states
   conclusions.

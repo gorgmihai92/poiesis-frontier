@@ -7,18 +7,32 @@ what would kill it. The experiments produce new data, which insight then reads.
 
 ## The Poiesis toolkits
 
-**Collect → connect → explore → create.** Four toolkits, each usable on its own; together, each one builds on what
-the previous one left in your project.
+**Collect → connect → explore → create.** Four toolkits. Each works on its own; together, each reads what the others
+left in your project, as plain files.
 
-| Toolkit | You | What it does | Leaves in your project |
-|---|---|---|---|
-| [poiesis-research](https://github.com/gorgmihai92/poiesis-research) | **collect** | finds and cites sources: the literature on a topic, the evidence behind a claim, the grants that fit | `research/` |
-| [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) | **connect** | interprets what was collected, or any data: insights and foresight, each conclusion challenged | `insights/`, `foresight/` |
-| [poiesis-frontier](https://github.com/gorgmihai92/poiesis-frontier) | **explore** | new concepts from what was tested, each with the experiment that could kill it | `frontier/` |
-| [poiesis-design](https://github.com/gorgmihai92/poiesis-design) | **create** | designs the interface and how the app behaves, and checks both before release | `.poiesis-design/`, your design tokens |
+| Toolkit | Role | Agents | Reads | Leaves in your project |
+|---|---|---|---|---|
+| [poiesis-research](https://github.com/gorgmihai92/poiesis-research) | **collect:** the literature on a topic, the evidence for and against a claim, the grants that fit | `paper-scout`, `evidence-scout`, `funding-scout` | the web's scholarly databases, official funding pages | `research/` |
+| [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) | **connect:** what the evidence or your data mean, and what is emerging; every conclusion challenged | `insight-analyst`, `foresight-analyst`, `challenger` | `research/`, your own data, `frontier/results/` | `insights/`, `foresight/` |
+| [poiesis-frontier](https://github.com/gorgmihai92/poiesis-frontier) | **explore:** new concepts, each with the smallest experiment that could kill it | `experimentalist` | `insights/`, `foresight/`, `research/` | `frontier/` |
+| [poiesis-design](https://github.com/gorgmihai92/poiesis-design) | **create:** how the interface looks and behaves, checked before release | `ui-auditor`, `ux-tester` | your code, `.poiesis-design/` | `.poiesis-design/`, design tokens, components |
 
-Frontier does not look for patterns itself. It starts from the ones insight has tested, and its experiments
-produce data for insight to read. Concepts that survive their experiments go to design to be built.
+```
+research ──► insight ──► frontier ──► design
+               ▲            │
+               └─ results ◄─┘   (experiment results go back to insight as data)
+```
+
+- **One job each.** Research says what sources say; insight says what it means; frontier proposes what could be
+  and how to test it; design builds and checks. None does another's job.
+- **None needs another.** When one would really improve the answer, Claude says so once, in one line, and offers
+  to install it. You can say no; the work goes on and the report says what was left out.
+- **Depth you choose:** quick, standard (the default) or thorough, per request or as `Depth:` in
+  `research/research.config.md`. A few rules hold at every depth (nothing invented, sources cited, interpretation
+  labelled); the rest scale with what is at stake, and every report ends with what was **not checked**.
+- **Short answers.** The answer first; the full work goes in the saved file. Agents are used only for independent
+  parts in parallel, or for an independent check at thorough depth.
+- **Rules limit what is reported as true, never what may be explored.**
 
 ## What it covers
 
@@ -78,8 +92,9 @@ playbook.
 
 - **Start from what was tested.** Insights marked kept or weakened by insight's challenge, foresight scenarios,
   research gaps. Without them, the question's premise becomes the first assumption to test.
-- **An independent experimentalist.** The agent gets the concepts and their starting points, not the reasoning
-  that produced them, and looks for the cheapest way each could fail.
+- **An independent experimentalist at thorough depth.** The agent gets the concepts and their starting points, not
+  the reasoning that produced them, and looks for the cheapest way each could fail. Otherwise the experiment
+  playbook runs inline.
 - **Experiments are logged before they run.** The kill criterion is dated in `frontier/experiments.md` before the
   experiment starts. `experiments.py` lists open and overdue experiments and flags any kill criterion that is
   missing or written after the start.
