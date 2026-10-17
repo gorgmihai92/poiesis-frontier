@@ -5,6 +5,9 @@ the scenarios foresight built, or the gaps research found, and turns them into *
 conclusions: every concept carries the assumption it tests, the smallest experiment that could prove it wrong, and
 what would kill it. The experiments produce new data, which insight then reads.
 
+For anyone who knows what the evidence says and wants to try something new: a product, a service, a research
+method. Install it below and ask in plain language.
+
 ## The Poiesis toolkits
 
 **Collect → connect → explore → create.** Four toolkits. Each works on its own; together, each reads what the others
@@ -15,7 +18,7 @@ left in your project, as plain files.
 | [poiesis-research](https://github.com/gorgmihai92/poiesis-research) | **collect:** the literature on a topic, the evidence for and against a claim, the grants that fit | `paper-scout`, `evidence-scout`, `funding-scout` | the web's scholarly databases, official funding pages | `research/` |
 | [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) | **connect:** what the evidence or your data mean, and what is emerging; every conclusion challenged | `insight-analyst`, `foresight-analyst`, `challenger` | `research/`, your own data, `frontier/results/` | `insights/`, `foresight/` |
 | [poiesis-frontier](https://github.com/gorgmihai92/poiesis-frontier) | **explore:** new concepts, each with the smallest experiment that could kill it | `experimentalist` | `insights/`, `foresight/`, `research/` | `frontier/` |
-| [poiesis-design](https://github.com/gorgmihai92/poiesis-design) | **create:** how the interface looks and behaves, checked before release | `ui-auditor`, `ux-tester` | your code, `.poiesis-design/` | `.poiesis-design/`, design tokens, components |
+| [poiesis-design](https://github.com/gorgmihai92/poiesis-design) | **create:** how the interface looks, behaves and what it says, checked before release | `ui-auditor`, `ux-tester`, `copy-reviewer` | your code, `.poiesis-design/` | `.poiesis-design/`, design tokens, components |
 
 ```
 research ──► insight ──► frontier ──► design
@@ -34,7 +37,7 @@ research ──► insight ──► frontier ──► design
   parts in parallel, or for an independent check at thorough depth.
 - **Rules limit what is reported as true, never what may be explored.**
 
-## What it covers
+## Seven methods, from framing the problem to the experiment
 
 | Method | It asks | It returns |
 |---|---|---|
@@ -67,9 +70,9 @@ In Claude Code:
 
 It needs **Python 3**, which macOS and most Linux systems already have. No keys, no setup.
 
-## What to ask Claude
+## Ask in plain language
 
-Ask in plain language. The plugin comes in when the work is new concepts or experiments, and you can name the
+The plugin comes in when the work is new concepts or experiments, and you can name the
 agent directly.
 
 - *"From the onboarding insights we kept, what would onboarding look like with no forms at all?"*
@@ -78,7 +81,7 @@ agent directly.
 - *"Map the loops in our marketplace and find the leverage points."*
 - *"Use the experimentalist on these five concepts: what's the cheapest way each could fail?"*
 
-## How it works
+## Every concept ends with an experiment that could kill it
 
 One skill, `frontier`, is the entry point. It reads what was tested (`insights/`, `foresight/`, `research/`),
 frames the problem, picks one or more **method playbooks**, and ends every concept with the **experiment**
@@ -101,7 +104,7 @@ playbook.
 - **Results go back to insight.** Each result is saved in `frontier/results/` with its raw data; poiesis-insight
   reads it as data and challenges what it means.
 
-## The rules
+## The same rules for every concept: no conclusions
 
 The same rules apply to every playbook (`skills/frontier/rules.md`), each with its source:
 
@@ -120,7 +123,7 @@ The same rules apply to every playbook (`skills/frontier/rules.md`), each with i
 - **Convincing is not evidence.** No invented specifics to make a concept persuasive; an assumed future names its
   drivers and comes with a contrasting one; concepts are ranked by what their test would teach, not by appeal.
 
-## What it adds to your project
+## Concepts and experiments stay in `frontier/`
 
 ```
 frontier/<date>-<topic>.md      starting points, frame, concepts, each with its experiment
@@ -208,4 +211,4 @@ Edit the files under `plugins/poiesis-frontier/`, run `claude plugin validate .`
 
 ## License
 
-MIT. Requires Python 3.
+MIT.
