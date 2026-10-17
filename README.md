@@ -181,6 +181,14 @@ a web page or only the abstract was read.
 - **Lateral thinking (de Bono) and speculative design (Dunne & Raby 2013):** used as methods; their sources are
   not yet read, and no rule rests on them.
 
+## Files shared with the other toolkits
+
+Writes `frontier/<date>-<topic>.md` concepts (**Starting point**, **Assumption**, **Kill criterion**, **Verdict**, **Log id**); the log `frontier/experiments.md`; results in `frontier/results/<id>.md`, read by insight. It reads insight's **Challenge** line, foresight scenarios and research notes.
+
+The paths and fields the other toolkits read are a contract: they change only in a major version, noted in the
+changelog. Every plugin reads the others' files tolerantly: a missing file or field is reported as unknown, never
+an error. The full list is in each skill's `SKILL.md`, so Claude knows it too.
+
 ## Update or remove
 
 ```
@@ -191,7 +199,7 @@ a web page or only the abstract was read.
 
 ## Changing the plugin
 
-Edit the files under `plugins/poiesis-frontier/`, run `claude plugin validate .`, bump the version in
+Edit the files under `plugins/poiesis-frontier/`, run `claude plugin validate .`, bump the version (major if a field under "Files" changes) in
 `plugin.json`, `marketplace.json` and `CHANGELOG.md`, and push. Projects get it with the update commands above.
 
 ## License

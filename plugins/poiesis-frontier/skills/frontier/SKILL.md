@@ -23,6 +23,8 @@ experiments produce new data, which insight then reads.
 
 1. **Start from what was tested** (see "Input" below). Say what the starting points are and how each was tested.
    If there are none, the user's question is the start, and its premise becomes the first assumption to test.
+   Answer on your own; where research (a premise nobody checked) or insight (data or scenarios to start from)
+   would make the concepts more accurate, say which and why in one line.
 2. **Frame** with `playbooks/frame.md`: what kind of problem it is decides whether frontier fits and how big the
    experiments are.
 3. **Generate** with one or more method playbooks. A request may combine them (e.g. first principles, then a
@@ -47,7 +49,7 @@ What frontier reads, if the project has it (it works without them too):
   saying what is different.
 Frontier never edits these files; it writes only to `frontier/`.
 
-## Output
+## Output (when saved: SKILL.md, "Saving")
 
 - `frontier/<YYYY-MM-DD>-<topic>.md`: starting points, frame, the concepts (`templates/concept.md`), each with its
   experiment.
@@ -61,9 +63,15 @@ inconclusive, and rows missing a kill criterion or with a kill criterion written
 Scripts are in `${CLAUDE_SKILL_DIR}/scripts` (called `$S`; if that path does not exist, Glob for
 `**/frontier/scripts/experiments.py` under `~/.claude`). They need only Python 3; run them with `python3 -I`.
 
+## Saving
+Save the work (paths in the playbooks) when any of these holds: the depth is standard or thorough; the user asks;
+the project already has the folder (`frontier/`), so it keeps a record; or something must be tracked later (an experiment with a kill criterion).
+Otherwise (quick depth, a one-off question) answer in the chat only, and end with one line offering to save it.
+Never create a folder the user did not want.
+
 ## Answers
-Short and direct: the answer first, then what it rests on, in bullets or a table; no preamble, no recap. The full
-work goes in the saved file; the chat gets the summary, the "Not checked" line and the file's path. Use an agent
+Short and direct: the answer first, then what it rests on, in bullets or a table; no preamble, no recap. When the
+work is saved, the chat gets the summary, the "Not checked" line and the file's path. Use an agent
 only for independent parts that can run in parallel, or for the independent check at thorough depth; otherwise
 work inline.
 
@@ -77,3 +85,14 @@ the user agrees, with `claude plugin marketplace add gorgmihai92/<repo>` and the
   and to interpret experiment results.
 - **poiesis-ui** (repo `poiesis-design`): to build a concept that survived its experiment: how it looks.
 - **poiesis-ux** (repo `poiesis-design`): the same: how it behaves; its tester walks the prototype.
+
+## Files shared with other Poiesis plugins
+These paths and fields are a contract between the Poiesis plugins: rename or remove one only in a major version,
+and say so in the changelog; adding fields is free. Read other plugins' files tolerantly: a missing file or field
+means "unknown", said in the report, never an error.
+- Writes `frontier/<date>-<topic>.md`: concepts with **Starting point**, **Assumption**, **Kill criterion**,
+  **Verdict** and **Log id**; `frontier/experiments.md` (columns `id | concept | assumption | prediction | kill
+  criterion | criterion written | started | due | status | result`); `frontier/results/<id>.md` ("What happened",
+  "Against the kill criterion", "Not predicted (exploratory)", **Raw data**), read by poiesis-insight.
+- Reads `insights/` (poiesis-insight: the **Challenge** line), `foresight/` (scenarios) and `research/notes/`
+  (poiesis-research: gaps, "Later work").

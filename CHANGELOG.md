@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.2
+- Saving: files only at standard or thorough depth, when asked, when `frontier/` already exists, or for an
+  experiment; otherwise the answer stays in the chat.
+- Answers on its own without insight or research (speculative design labels its future "assumed") and says in
+  one line which of them would make it more accurate.
+- "Files": the paths and fields shared with the other Poiesis plugins, as a contract (changed only in a major
+  version), in the skill and the README; other plugins' files are read tolerantly.
+
 ## 1.1.1
 - Depth is set with a `Depth:` line in the project's `CLAUDE.md`, so it works without poiesis-research.
 
