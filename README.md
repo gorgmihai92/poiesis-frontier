@@ -1,35 +1,39 @@
 # Poiesis Frontier
 
-A Claude Code plugin for thinking past what is known. It starts from the conclusions insight has already tested,
-the scenarios foresight built, or the gaps research found, and turns them into **new concepts**. It never states
-conclusions: every concept carries the assumption it tests, the smallest experiment that could prove it wrong, and
-what would kill it. The experiments produce new data, which insight then reads.
+New concepts, each with the experiment that could kill it, in Claude Code. Poiesis Frontier thinks past what is
+known. It starts from the conclusions Poiesis Insight has already tested, the scenarios its foresight built, or the
+gaps research found, and turns them into **new concepts**. It never states conclusions: every concept carries the
+assumption it tests, the smallest experiment that could prove it wrong, and what would kill it. The experiments
+produce new data, which Poiesis Insight then reads.
 
-For anyone who knows what the evidence says and wants to try something new: a product, a service, a research
-method. Install it below and ask in plain language.
+For anyone who knows what the evidence says and wants to try something new: a product, a service, a research method.
+Poiesis Frontier is one of the four products in the [Poiesis Toolkit](#part-of-the-poiesis-toolkit) and works on its
+own, as one plugin. Install it below and ask in plain language.
 
-## The Poiesis toolkits
+## Part of the Poiesis Toolkit
 
-**Collect → connect → explore → create.** Four toolkits. Each works on its own; together, each reads what the others
-left in your project, as plain files.
+The Poiesis Toolkit is four products for Claude Code, one for each step from a question to a finished product:
+**Research** collects, **Insight** connects, **Frontier** explores, **Design** creates. Each installs and works on
+its own. Insight and Frontier also read what the other steps left in your project, as plain files, and Design
+builds a Frontier concept when you ask.
 
-| Toolkit | Role | Agents | Reads | Leaves in your project |
-|---|---|---|---|---|
-| [poiesis-research](https://github.com/gorgmihai92/poiesis-research) | **collect:** the literature on a topic, the evidence for and against a claim, the grants that fit | `paper-scout`, `evidence-scout`, `funding-scout` | the web's scholarly databases, official funding pages | `research/` |
-| [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) | **connect:** what the evidence or your data mean, and what is emerging; every conclusion challenged | `insight-analyst`, `foresight-analyst`, `challenger` | `research/`, your own data, `frontier/results/` | `insights/`, `foresight/` |
-| [poiesis-frontier](https://github.com/gorgmihai92/poiesis-frontier) | **explore:** new concepts, each with the smallest experiment that could kill it | `experimentalist` | `insights/`, `foresight/`, `research/` | `frontier/` |
-| [poiesis-design](https://github.com/gorgmihai92/poiesis-design) | **create:** how the interface looks, behaves and what it says, checked before release | `ui-auditor`, `ux-tester`, `copy-reviewer` | your code, `.poiesis-design/` | `.poiesis-design/`, design tokens, components |
+| Product | What it does | Plugins | Agents | Reads | Leaves in your project |
+|---|---|---|---|---|---|
+| [Poiesis Research](https://github.com/gorgmihai92/poiesis-research) | **collect:** the literature on a topic, the evidence for and against a claim, the grants that fit | `poiesis-research` | `paper-scout`, `evidence-scout`, `funding-scout` | the web's scholarly databases, official funding pages | `research/` |
+| [Poiesis Insight](https://github.com/gorgmihai92/poiesis-insight) | **connect:** what the evidence or your data mean, and what is emerging; every conclusion challenged | `poiesis-insight` | `insight-analyst`, `foresight-analyst`, `challenger` | `research/`, your own data, `frontier/results/` | `insights/`, `foresight/` |
+| [Poiesis Frontier](https://github.com/gorgmihai92/poiesis-frontier) | **explore:** new concepts, each with the smallest experiment that could kill it | `poiesis-frontier` | `experimentalist` | `insights/`, `foresight/`, `research/` | `frontier/` |
+| [Poiesis Design](https://github.com/gorgmihai92/poiesis-design) | **create:** how the interface looks, behaves and what it says, built from components that already pass, checked before release | `poiesis-ui`, `poiesis-ux`, `poiesis-copy`, `poiesis-components` | `ui-auditor`, `ux-tester`, `copy-reviewer` | your code, `.poiesis-design/` | `.poiesis-design/`, design tokens, components |
 
 ```
-research ──► insight ──► frontier ──► design
+Research ──► Insight ──► Frontier ──► Design
                ▲            │
-               └─ results ◄─┘   (experiment results go back to insight as data)
+               └─ results ◄─┘   (experiment results go back to Insight as data)
 ```
 
-- **One job each.** Research says what sources say; insight says what it means; frontier proposes what could be
-  and how to test it; design builds and checks. None does another's job.
-- **None needs another.** When one would really improve the answer, Claude says so once, in one line, and offers
-  to install it. You can say no; the work goes on and the report says what was left out.
+- **One job each.** Research says what sources say; Insight says what it means; Frontier proposes what could be
+  and how to test it; Design builds and checks. None does another's job.
+- **None needs another.** When another product would really improve the answer, Claude says so once, in one line,
+  and offers to install it. You can say no; the work goes on and the report says what was left out.
 - **Depth you choose:** quick, standard (the default) or thorough, per request or as a line in your project's
   `CLAUDE.md`, e.g. `Depth: quick`. A few rules hold at every depth (nothing invented, sources cited, interpretation
   labelled); the rest scale with what is at stake, and every report ends with what was **not checked**.
@@ -49,15 +53,16 @@ research ──► insight ──► frontier ──► design
 | **Speculative design** | what ordinary object would exist in this future scenario? | artefacts to put in front of people, so they think about the future or about current practice |
 | **Experiment** (always last) | what is the cheapest way this concept could fail? | the assumption, a prediction, the smallest experiment, a kill criterion fixed in advance |
 
-Some ways it works with the other toolkits:
+Some ways it works with the other products:
 
-- **UI without classic components, adaptive UI:** frontier generates the concept, then poiesis-ui and poiesis-ux
-  build it.
-- **The future of education:** foresight (poiesis-insight) produces scenarios, then frontier designs speculative
-  artefacts and experiments from them.
-- **What is missing from software design:** research and insight find the gaps, then frontier reframes them.
-- **Better research methods:** frontier designs a method experiment, then research and insight check it against
-  the literature.
+- **UI without classic components, adaptive UI:** Poiesis Frontier generates the concept, then Poiesis Design
+  (poiesis-ui and poiesis-ux) builds it.
+- **The future of education:** foresight (Poiesis Insight) produces scenarios, then Poiesis Frontier designs
+  speculative artefacts and experiments from them.
+- **What is missing from software design:** Poiesis Research and Poiesis Insight find the gaps, then Poiesis
+  Frontier reframes them.
+- **Better research methods:** Poiesis Frontier designs a method experiment, then Poiesis Research and Poiesis
+  Insight check it against the literature.
 
 ## Install
 
@@ -89,20 +94,20 @@ playbook.
 
 | Step | Playbook | What it does |
 |---|---|---|
-| frame | `frame.md` | decides the kind of problem; frontier belongs in the complex ones |
+| frame | `frame.md` | decides the kind of problem; Poiesis Frontier belongs in the complex ones |
 | generate | `first-principles.md`, `lateral.md`, `systems.md`, `concepts.md`, `speculative.md` | produces concepts, each with its starting point and method |
 | test | `experiment.md`, agent `experimentalist` | assumption, prediction, smallest experiment, kill criterion; marks each concept ready, sharpen or not testable yet |
 
-- **Start from what was tested.** Insights marked kept or weakened by insight's challenge, foresight scenarios,
-  research gaps. Without them, the question's premise becomes the first assumption to test.
+- **Start from what was tested.** Insights marked kept or weakened by Poiesis Insight's challenge, foresight
+  scenarios, research gaps. Without them, the question's premise becomes the first assumption to test.
 - **An independent experimentalist at thorough depth.** The agent gets the concepts and their starting points, not
   the reasoning that produced them, and looks for the cheapest way each could fail. Otherwise the experiment
   playbook runs inline.
 - **Experiments are logged before they run.** The kill criterion is dated in `frontier/experiments.md` before the
   experiment starts. `experiments.py` lists open and overdue experiments and flags any kill criterion that is
   missing or written after the start.
-- **Results go back to insight.** Each result is saved in `frontier/results/` with its raw data; poiesis-insight
-  reads it as data and challenges what it means.
+- **Results go back to Poiesis Insight.** Each result is saved in `frontier/results/` with its raw data; Poiesis
+  Insight reads it as data and challenges what it means.
 
 ## The same rules for every concept: no conclusions
 
@@ -188,11 +193,11 @@ a web page or only the abstract was read.
 - **Lateral thinking (de Bono) and speculative design (Dunne & Raby 2013):** used as methods; their sources are
   not yet read, and no rule rests on them.
 
-## Files shared with the other toolkits
+## Files shared with the other products
 
-Writes `frontier/<date>-<topic>.md` concepts (**Starting point**, **Assumption**, **Kill criterion**, **Verdict**, **Log id**); the log `frontier/experiments.md`; results in `frontier/results/<id>.md`, read by insight. It reads insight's **Challenge** line, foresight scenarios and research notes.
+Writes `frontier/<date>-<topic>.md` concepts (**Starting point**, **Assumption**, **Kill criterion**, **Verdict**, **Log id**); the log `frontier/experiments.md`; results in `frontier/results/<id>.md`, read by Insight. It reads Insight's **Challenge** line, foresight scenarios and research notes.
 
-The paths and fields the other toolkits read are a contract: they change only in a major version, noted in the
+The paths and fields the other products read are a contract: they change only in a major version, noted in the
 changelog. Every plugin reads the others' files tolerantly: a missing file or field is reported as unknown, never
 an error. The full list is in each skill's `SKILL.md`, so Claude knows it too.
 
