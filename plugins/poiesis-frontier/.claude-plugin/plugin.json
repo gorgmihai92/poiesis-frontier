@@ -1,0 +1,20 @@
+{
+  "name": "poiesis-frontier",
+  "version": "1.0.0",
+  "description": "New concepts and the experiments that could prove them wrong, from what insight has tested: first principles, lateral thinking, systems, complexity, philosophy of concepts, speculative design. Every concept carries its assumption, the smallest experiment and a kill criterion fixed in advance. Agent: experimentalist.",
+  "author": {
+    "name": "George Mihai",
+    "email": "hi@georgemihai.com"
+  },
+  "homepage": "https://github.com/gorgmihai92/poiesis-frontier",
+  "repository": "https://github.com/gorgmihai92/poiesis-frontier",
+  "license": "MIT",
+  "keywords": [
+    "frontier",
+    "concepts",
+    "experiments",
+    "lateral-thinking",
+    "systems-thinking",
+    "speculative-design"
+  ]
+}

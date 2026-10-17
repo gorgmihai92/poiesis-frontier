@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "poiesis-frontier",
+  "description": "Explore beyond what is known: new concepts from tested insights, each with the experiment that could kill it.",
+  "owner": {
+    "name": "George Mihai",
+    "email": "hi@georgemihai.com"
+  },
+  "plugins": [
+    {
+      "name": "poiesis-frontier",
+      "description": "New concepts and the experiments that could prove them wrong, from what insight has tested: first principles, lateral thinking, systems, complexity, philosophy of concepts, speculative design. Every concept carries its assumption, the smallest experiment and a kill criterion fixed in advance. Agent: experimentalist.",
+      "version": "1.0.0",
+      "author": {
+        "name": "George Mihai",
+        "email": "hi@georgemihai.com"
+      },
+      "source": "./plugins/poiesis-frontier",
+      "category": "productivity",
+      "homepage": "https://github.com/gorgmihai92/poiesis-frontier"
+    }
+  ]
+}
