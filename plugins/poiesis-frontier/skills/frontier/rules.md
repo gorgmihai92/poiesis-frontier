@@ -2,7 +2,8 @@
 
 ## Depth
 Some rules hold at every depth; the rest are defaults, scaled to what is at stake. The user picks the depth, or the
-project's `research.config.md` sets it (`Depth:`); otherwise **standard**.
+project sets it with a `Depth:` line in its `CLAUDE.md` (read in every session, by every Poiesis plugin);
+otherwise **standard**.
 - **Always:** no conclusions; each concept's assumption and kill criterion fixed before anything runs; no harm, and
   anything with personal data, money or a public release only proposed; nothing invented.
 - **Quick:** one method, up to three concepts, each with its assumption, smallest experiment and kill criterion.
