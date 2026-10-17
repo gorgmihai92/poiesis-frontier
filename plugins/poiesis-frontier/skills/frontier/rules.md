@@ -5,7 +5,8 @@ Some rules hold at every depth; the rest are defaults, scaled to what is at stak
 project sets it with a `Depth:` line in its `CLAUDE.md` (read in every session, by every Poiesis plugin);
 otherwise **standard**.
 - **Always:** no conclusions; each concept's assumption and kill criterion fixed before anything runs; no harm, and
-  anything with personal data, money or a public release only proposed; nothing invented.
+  anything with personal data, money or a public release only proposed; nothing invented, and no invented
+  specifics to persuade.
 - **Quick:** one method, up to three concepts, each with its assumption, smallest experiment and kill criterion.
 - **Standard:** frame, the methods that fit, and the full experiment playbook.
 - **Thorough:** several methods, and the experiments designed by the independent `experimentalist` agent, given the
@@ -61,5 +62,11 @@ finding. Words like "shows", "proves" or "the answer is" do not appear in a conc
 ## Honesty
 - Facts come from the input or from sources read; nothing is added from memory without marking it "from general
   knowledge, unverified". Named methods (de Bono, Dunne & Raby) are used as methods, not as evidence.
+- **Convincing is not evidence.** Detail makes a story feel more likely while making it less likely: each detail
+  is one more assumption (Tversky & Kahneman 1983). No specifics (numbers, names, dates, quotes, "studies show")
+  are added to make a concept or scenario persuasive; each one comes from a source or is marked "invented for the
+  artefact".
+- **Ranked by the test, not the appeal.** Concepts are ordered by what their experiment would teach and how cheap
+  it is, never by how good they sound.
 - A concept that cannot be tested yet says so, and says what would make it testable. It is not reported as a
   concept until then.

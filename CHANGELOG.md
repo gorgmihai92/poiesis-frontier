@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.3
+- Convincing is not evidence: no invented specifics to persuade; each comes from a source or is marked "invented
+  for the artefact". Concepts ranked by what their test would teach, not by appeal.
+- Speculative design without foresight: names the drivers and their assumptions, and builds at least two
+  contrasting futures.
+- Two new research notes: Tversky & Kahneman 1983, Phadnis et al. 2015.
+
 ## 1.1.2
 - Saving: files only at standard or thorough depth, when asked, when `frontier/` already exists, or for an
   experiment; otherwise the answer stays in the chat.

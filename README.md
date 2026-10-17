@@ -117,6 +117,8 @@ The same rules apply to every playbook (`skills/frontier/rules.md`), each with i
 - **Push where it moves the system,** knowing that deeper leverage meets more resistance.
 - **Nothing invented.** Facts come from the input or from sources read; named methods are used as methods, not as
   evidence.
+- **Convincing is not evidence.** No invented specifics to make a concept persuasive; an assumed future names its
+  drivers and comes with a contrasting one; concepts are ranked by what their test would teach, not by appeal.
 
 ## What it adds to your project
 
@@ -178,6 +180,8 @@ a web page or only the abstract was read.
 - **Real and perceived affordances, conventions:** Norman 1999.
 - **The perceptual bridge in speculative design:** Auger 2013.
 - **Kill criteria fixed and dated in advance; the unpredicted as exploratory:** Nosek et al. 2018, preregistration.
+- **Detail adds plausibility, not probability:** Tversky & Kahneman 1983, the conjunction fallacy.
+- **At least two contrasting futures:** Phadnis et al. 2015. One scenario steers judgment toward itself.
 - **Lateral thinking (de Bono) and speculative design (Dunne & Raby 2013):** used as methods; their sources are
   not yet read, and no rule rests on them.
 

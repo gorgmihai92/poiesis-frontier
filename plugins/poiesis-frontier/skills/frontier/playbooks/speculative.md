@@ -5,7 +5,8 @@ The starting point is a foresight scenario, not a guess.
 
 1. **Scenario:** take one scenario from `foresight/` if the project has it, with its drivers and its robust and
    contingent findings. Without one, build the future from the user's question, label it "assumed, not from
-   foresight", and go on. Then say in one line what would make it more accurate: poiesis-insight's foresight for
+   foresight", and go on: name its 2–3 drivers and the assumption under each, and build at least two contrasting
+   futures (or say why one is enough), so none reads as a prediction (Phadnis et al. 2015). Then say in one line what would make it more accurate: poiesis-insight's foresight for
    scenarios built from evidence and signals, poiesis-research for the facts behind the drivers, or both.
 2. **Everyday object of that future:** what ordinary thing would exist there (a product, a form, a rule, a
    service, a notice, an app screen)? Ordinary things say more about a future than spectacular ones.

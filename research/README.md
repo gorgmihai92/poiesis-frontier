@@ -14,7 +14,10 @@ read: the full text, a web page, or only the abstract.
   (authors' summary; to read in full).
 - **What a thing is for:** [Norman 1999](notes/norman-1999-affordance-conventions.md), real and perceived
   affordances, conventions.
-- **Speculative design:** [Auger 2013](notes/auger-2013-speculative-design.md), the perceptual bridge (abstract).
+- **Speculative design:** [Auger 2013](notes/auger-2013-speculative-design.md), the perceptual bridge (abstract);
+  [Phadnis et al. 2015](notes/phadnis-2015-scenario-planning.md), several scenarios, not one.
+- **Convincing is not evidence:** [Tversky & Kahneman 1983](notes/tversky-1983-conjunction-fallacy.md), the
+  conjunction fallacy (reference only).
 - **Experiments fixed in advance:** [Nosek et al. 2018](notes/nosek-2018-preregistration.md), prediction and
   postdiction, preregistration.
 
