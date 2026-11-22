@@ -55,6 +55,8 @@ ID_LINE = re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:\*\*)?|\*\*)id(?:\*\*)?[ \t]*:(?:
 CHALLENGE = re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:[*_]{1,2})?|[*_]{1,2})challenge[a-z ]*?(?:[*_]{1,2})?[ \t]*"
                        r"(?::(?:[*_]{1,2})?|(?:[*_]{1,2})?:|[*_]{2}[ \t])[ \t]*(.*)$", re.IGNORECASE)
 VERDICT_WORD = re.compile(r"\b(kept|weakened|dropped)\b", re.IGNORECASE)
+OBJECT_ID = re.compile(r"(?<![A-Za-z0-9])[A-Z]{1,3}-[0-9]+(?![A-Za-z0-9])")
+ITEM = re.compile(r"^[ \t]*[-*+][ \t]+")
 NEGATION = re.compile(r"\b(?:not|no|never|un\w*)\b", re.IGNORECASE)
 CHECKED = re.compile(r"[ \t]*·[ \t]*checked \d{4}-\d{2}-\d{2}[ \t]*$")
 PREFIXES = {"CN": "a concept", "ST": "a study design", "E": "an experiment"}
@@ -145,8 +147,17 @@ def seal(id_: str, verdict: str, date: str, sha: str) -> str:
 
 
 def read_text(path: Path) -> str:
-    """A note's text. A byte-order mark at the start is not part of it."""
+    """A note's text. A byte-order mark at the start is not part of it. Bytes that are not UTF-8 are read as U+FFFD,
+    so a sentence with them never matches its stamp; such a note is never written back (see `gate`)."""
     return path.read_bytes().decode("utf-8-sig", errors="replace")
+
+
+def is_utf8(path: Path) -> bool:
+    try:
+        path.read_bytes().decode("utf-8")
+        return True
+    except UnicodeDecodeError:
+        return False
 
 
 def blocks(text: str) -> list[dict]:
@@ -216,7 +227,7 @@ def load_stamps(path: Path) -> tuple[dict[str, tuple[int, dict]], str | None]:
     if not path.is_file():
         return {}, None
     try:
-        text = path.read_bytes().decode("utf-8")
+        text = path.read_bytes().decode("utf-8-sig")
     except UnicodeDecodeError:
         return {}, "it is not UTF-8"
     last: dict[str, tuple[int, dict]] = {}
@@ -278,16 +289,48 @@ def conclusions(folders: list[Path], extra: list[Path]) -> dict[str, list[tuple[
 # ---------------------------------------------------------------------------------------------------------------
 
 def from_ids(value: str) -> list[str]:
-    """The ids and keys of a From line: comma-separated, each taken up to its first space."""
+    """The ids and keys of a From value.
+
+    Every object id in it (two or three capital letters, a dash, digits: IN-002, SC-001) is taken wherever it
+    stands, so `IN-001 and IN-002`, `IN-001; IN-002`, `[IN-002](…)` or `**IN-002**` each name every id they hold.
+    Besides those, each comma-separated part that names no object id is a key (a note's name or a citation key),
+    taken up to its first space. `none` and a dash name nothing.
+    """
     out: list[str] = []
-    for part in value.split(","):
-        token = part.strip().strip("`").strip()
+    for part in re.split(r"[,;]", value):
+        ids = OBJECT_ID.findall(part)
+        if ids:
+            out += [i for i in dict.fromkeys(ids) if i not in out]
+            continue
+        token = part.strip().strip("`*_").strip()
         token = token[2:-2].strip() if token.startswith("[[") and token.endswith("]]") else token
         token = token.split()[0] if token.split() else ""
-        token = token.strip("`").rstrip(".;")
+        token = token.strip("`*_[]()").rstrip(".;:")
         if token.lower() not in NOTHING and token not in out:
             out.append(token)
     return out
+
+
+def from_value(block: dict) -> tuple[int, str, int] | None:
+    """The From line with the lines it runs on to: (its line, the whole value, the value's last line). A value
+    ends at an empty line, at the next list item, or at a line that starts with a bold label, as the reference
+    reads a field that wraps."""
+    found = first(block, FROM)
+    if not found:
+        return None
+    index, value = found
+    parts, last = [value], index
+    for i in block["fields"]:
+        if i <= index:
+            continue
+        line = block["lines"][i]
+        line = line[:-1] if line.endswith("\r") else line
+        if i != last + 1 or not line.strip() or ITEM.match(line) or line.lstrip().startswith("**") \
+                or HEADING.match(line):
+            break
+        parts.append(line.strip())
+        last = i
+    return index, " ".join(parts), last
 
 
 def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps_name: str, root: Path,
@@ -315,6 +358,11 @@ def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps
 
     if len(places) > 1:
         names = ", ".join(sorted({_rel(p, root) for p, _ in places}))
+        if not damaged and id_ in stamps and stamp_intact(stamps[id_][1]) and stamps[id_][1]["verdict"] == "dropped":
+            obj = stamps[id_][1]
+            return "stop", f"{id_} dropped {obj['date']} (it is under two headings, {names}, so the sentence was not compared)"
+        if any("dropped" in (shown_verdicts(b) or ()) for _, b in places):
+            return "stop", f"{id_} the note says dropped (it is under two headings, {names})"
         return "open", f"{id_} is under two headings ({names}): neither can be verified"
     if damaged:
         return stop_on_label("the stamp file is damaged") or (
@@ -323,7 +371,7 @@ def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps
         if block is None:
             where = " or ".join(f"{f}/" for f in NOTE_FOLDERS)
             return "open", f"{id_} no stamp, and no conclusion with this id in {where}"
-        rests = first(block, FROM)
+        rests = from_value(block)
         if shown is None and rests and follow:
             inner = [check_start(i, stamps, damaged, found, stamps_name, root, follow=False)
                      for i in from_ids(rests[1]) if i != id_]
@@ -331,7 +379,7 @@ def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps
                 texts = "; ".join(text for _, text in inner)
                 if any(kind in ("stop", "via") for kind, _ in inner):
                     return "via", f"{id_} rests on a dropped conclusion ({texts})"
-                return "open", f"{id_} no stamp: it is not a conclusion and was not challenged; it rests on {texts}"
+                return "open", f"{id_} no stamp and no Challenge line, so it was not challenged; it rests on {texts}"
         return stop_on_label("no stamp") or (
             "open", f"{id_} no stamp: no challenge is recorded" + (f" ({said})" if said else ""))
     line, obj = stamps[id_]
@@ -362,7 +410,7 @@ def _rel(path: Path, root: Path) -> str:
 
 def gate_concept(block: dict, stamps: dict, damaged: str | None, found: dict, stamps_name: str, root: Path) -> dict:
     """The gate's result for one concept: state (through, provisional, stopped), why, and a line per start."""
-    start = first(block, FROM)
+    start = from_value(block)
     ids = from_ids(start[1]) if start else []
     if not ids:
         return {"state": "provisional", "why": "no starting point is named", "starts": [],
@@ -413,9 +461,13 @@ def write_marks(path: Path, text: str, concepts: list[tuple[dict, dict]], today:
     lines = text.split("\n")
     for block, result in sorted(concepts, key=lambda c: c[0]["start"], reverse=True):
         name, value = mark(result, today)
-        anchor = first(block, FROM) or first(block, ID_LINE)
+        start = from_value(block)
+        head = start[0] if start else first(block, ID_LINE)[0]
+        anchor = (start[2] if start else head, "")
+        head_line = lines[head]
+        item = ITEM.match(head_line)
+        lead = item.group(0) if item else re.match(r"^[ \t]*", head_line).group(0) + "- "
         anchor_line = lines[anchor[0]]
-        lead = re.match(r"^[ \t]*[-*+][ \t]+", anchor_line).group(0)
         ending = "\r" if anchor_line.endswith("\r") else ""
         old = [i for i in block["fields"] if PROVISIONAL.match(lines[i].rstrip("\r")) or STOPPED.match(lines[i].rstrip("\r"))]
         for i in sorted(old, reverse=True):
@@ -425,8 +477,9 @@ def write_marks(path: Path, text: str, concepts: list[tuple[dict, dict]], today:
     new = "\n".join(lines)
     if new == text:
         return False
+    bom = b"\xef\xbb\xbf" if path.read_bytes().startswith(b"\xef\xbb\xbf") else b""
     tmp = path.with_name(path.name + ".tmp")
-    tmp.write_bytes(new.encode("utf-8"))
+    tmp.write_bytes(bom + new.encode("utf-8"))
     os.replace(tmp, path)
     return True
 
@@ -543,6 +596,10 @@ def gate(argv: list[str]) -> int:
         print(f"Stamps: {stamps_name}, {len(stamps)} id{'s' if len(stamps) != 1 else ''}.")
     else:
         print(f"Stamps: no file at {stamps_name}, so no challenge is on record here.")
+    if a.write and not is_utf8(a.note):
+        print(f"Not saved: {a.note} is not UTF-8 text, and writing it back would change its other bytes. "
+              "Save it as UTF-8 first.")
+        return 2
     if a.write:
         changed = write_marks(a.note, text, concepts, today)
         print(f"{'Saved' if changed else 'Unchanged'}: {a.note}")

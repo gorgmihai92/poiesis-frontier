@@ -1,4 +1,5 @@
 ---
 type: regex
-pattern: '(?i)dropped'
+pattern: 'dropped'
+flags: i
 ---
