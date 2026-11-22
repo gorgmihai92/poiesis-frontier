@@ -137,3 +137,7 @@ Added in 1.3.0. Everything above is unchanged.
   the gate's line and the log rows stay the record. In the block no line starts with `#`, text values are quoted,
   and a link is one quoted list item. Never put a link in a heading (the stamp and the gate hash it) or an **Id**
   line, or a link with an alias (`[[a|b]]`) in the log or any table.
+- When a value the block copies changes in the file, change the block in the same edit. Inside a quoted value
+  write `\"` for a quotation mark and `\\` for a backslash.
+- Link a concept or a study by its id, `"[[CN-001]]"`, but never an experiment: `frontier/results/E-001.md` and the
+  notebook's card for E-001 share the name.

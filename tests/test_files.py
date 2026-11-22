@@ -84,7 +84,7 @@ class Playbooks(unittest.TestCase):
 
 
 class Version(unittest.TestCase):
-    def test_the_version_is_1_2_0_in_three_places(self):
+    def test_the_version_is_the_same_in_three_places(self):
         plugin = json.loads((helpers.PLUGIN / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
         market = json.loads((helpers.ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
         self.assertEqual(plugin["version"], "1.3.0")
