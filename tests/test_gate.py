@@ -310,6 +310,30 @@ class WhatTheGateRefuses(Project):
         self.assertIn("  IN-001 kept 2026-11-17\n", out)
         self.assertIn("  walters-2023 no stamp, and no conclusion with this id in insights/ or foresight/\n", out)
 
+    def test_a_question_is_not_a_conclusion_and_the_gate_says_what_it_rests_on(self):
+        (self.root / "insights" / "2026-11-22-questions.md").write_text(
+            "### Does a reading list by year change what students cite?\n\n- **Id:** QN-001\n- **From:** IN-001\n",
+            encoding="utf-8")
+        code, out = self.gate(concept("CN-001", "QN-001"))
+        self.assertIn("PROVISIONAL CN-001: QN-001 could not be verified", out)
+        self.assertIn("  QN-001 no stamp: it is not a conclusion and was not challenged; it rests on IN-001 kept 2026-11-17\n", out)
+
+    def test_a_question_built_on_a_dropped_conclusion_stops_the_concept(self):
+        (self.root / "insights" / "2026-11-22-questions.md").write_text(
+            "### Why is topic B neglected?\n\n- **Id:** QN-002\n- **From:** IN-002, QN-002\n", encoding="utf-8")
+        code, out = self.gate(concept("CN-001", "QN-002"))
+        self.assertEqual(code, 1)
+        self.assertIn("STOPPED CN-001: QN-002 rests on a dropped conclusion", out)
+        self.assertIn("  QN-002 rests on a dropped conclusion (IN-002 dropped 2026-11-17)\n", out)
+
+    def test_following_from_goes_one_step_and_never_lets_a_concept_through(self):
+        (self.root / "insights" / "2026-11-22-questions.md").write_text(
+            "### A.\n\n- **Id:** QN-003\n- **From:** QN-004\n\n### B.\n\n- **Id:** QN-004\n- **From:** IN-002\n",
+            encoding="utf-8")
+        code, out = self.gate(concept("CN-001", "QN-003"))
+        self.assertIn("PROVISIONAL CN-001", out)
+        self.assertIn("QN-003 no stamp: it is not a conclusion and was not challenged; it rests on QN-004 no stamp: no challenge is recorded", out)
+
     def test_one_dropped_start_among_several_stops_the_concept(self):
         code, out = self.gate(concept("CN-001", "IN-001, IN-002, IN-003"))
         self.assertEqual(code, 1)
