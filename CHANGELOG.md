@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.2.0
+All additions to the 1.1.4 file contract; nothing is renamed or removed.
+- **Entry gate.** `experiments.py gate frontier/<note>.md [--write]` checks each concept's **From** against the
+  challenge stamps of poiesis-insight (`insights/challenge-stamps.jsonl`, format 1), with this plugin's own code:
+  through when every start is kept or weakened with an intact stamp and an unchanged sentence; provisional when a
+  start could not be verified, in a **Provisional** line in the concept's own note; stopped when a start was
+  dropped. A research question is followed one step to what it rests on. The experiment log is never written and
+  keeps its five statuses.
+- **Ids.** Concepts `CN-001`, study designs `ST-001`, each with **From**; `experiments.py ids CN|ST|E` gives the
+  next free one, `ids --list` the ones in use. The concept cell of the log starts with the concept's id.
+- **Evaluation that fits the stage** (`experiment.md`): sketch, probe, prototype, pilot; an early idea is
+  criticised and compared, not usability-tested; the test follows from what the concept claims.
+- **Three generation playbooks:** `design-space.md`, `estrangement.md` (a stranger's description, before and
+  elsewhere, relabelling, an extreme character, a counter-function) and `recombination.md` (an ordinary base with
+  one unusual pairing).
+- **Distinct ideas** (`rules.md`): a report gives how many concepts were generated and how many are distinct.
+- **Speculative research** (`speculative-research.md`): assumptions contested, two imaginary abstracts marked as
+  fiction, a protocol written and dated before the data.
+- **Speculative design** (`speculative.md`, `templates/artefact.md`): an artefact brief, two contrasting
+  versions, the staging, and the fiction marked in the artefact itself.
+- **Study design for a small group** (`study.md`, `templates/study.md`, saved in `frontier/studies/`) and
+  `power.py`: what a sample can detect, checked against the worked examples of the G*Power manual and Lakens 2022.
+- Twenty-three new research notes, each with how much of its source was read; `rules.md` ends with the list.
+- Tests (`tests/`, offline) and eval cases (`plugins/poiesis-frontier/evals/`, not run). Scripts run on Python 3.9
+  and later.
+
 ## 1.1.4
 - Suggestions of another Poiesis plugin, from the skill or its agents, give the plugin's link and name the skill or
   agent to use.
