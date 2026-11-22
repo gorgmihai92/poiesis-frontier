@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.3.0
+Everything is added: no path, field or column of 1.2.0 was renamed or removed, and `experiments.py` reads every
+file as before.
+- **Properties.** `templates/report.md` is the top of every report in `frontier/<date>-<topic>.md`: a block of
+  Obsidian properties (YAML between two `---` lines) with `type`, `plugin`, `date` and `topic`, then the title.
+  The log's template starts with the same four; a result adds `id`, `status` and `from`, and a study design `id`
+  and `from`. A report holds several concepts and the log several rows, so their properties carry no id: the Id,
+  From, Stage, Verdict and Log id lines, the gate's Provisional or Stopped line and the log rows stay the record.
+  The concept and artefact templates go inside a report and get no block.
+- **The block is a copy.** `SKILL.md` asks for it to change in the same edit as what it copies, and for no
+  experiment id to be linked.
+- **Tests.** `test_templates.py`: the block in each template and its rules; the log check, the gate (with and
+  without `--write`) and `ids` giving the same results with the block on a report, on the log and on the insight
+  report the gate reads.
+- **Docs.** The README's Design row names `poiesis-studio`, as the other READMEs do.
+- **Not checked in this version:** how Obsidian shows the properties (no vault was opened), and any run on a topic.
+
 ## 1.2.0
 All additions to the 1.1.4 file contract; nothing is renamed or removed.
 - **Entry gate.** `experiments.py gate frontier/<note>.md [--write]` checks each concept's **From** against the

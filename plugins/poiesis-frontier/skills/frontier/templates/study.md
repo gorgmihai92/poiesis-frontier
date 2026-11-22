@@ -1,3 +1,12 @@
+---
+type: study
+plugin: poiesis-frontier
+date: <YYYY-MM-DD, the Written line>
+topic: "<the study, in a few words>"
+id: "<ST-001, the same as the Id line>"
+from:
+  - "[[<each id of the From line, one item each>]]"
+---
 # <ST-001>: <the study in a few words>
 
 - **Id:** <ST-001>
