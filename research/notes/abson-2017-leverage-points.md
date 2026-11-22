@@ -5,6 +5,9 @@
   sections, not pages.
 - **Licence:** CC BY 4.0 (open access).
 - **Evidence:** analytical (a research agenda built on Meadows 1999).
+- **Read:** not recorded when the note was written (1.0.0): it was read on PubMed Central, and the claims cite
+  sections. Whether in full is not recorded. Recorded for 1.2.0 from what this note already said; the source was
+  not read again.
 
 ## What it says
 - Meadows' twelve points can be grouped into four kinds of system characteristics, from shallowest to deepest:

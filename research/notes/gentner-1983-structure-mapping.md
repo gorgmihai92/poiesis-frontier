@@ -4,6 +4,9 @@
 - **File:** `../papers/gentner-1983-structure-mapping.pdf`
 - **Licence:** free to read on the publisher's site, not open-licence: local only.
 - **Evidence:** analytical (a theory of analogy, with examples).
+- **Read:** not recorded when the note was written (1.0.0): the claims cite pages 1, 3, 4 and 6 of the local PDF.
+  Whether in full is not recorded. Recorded for 1.2.0 from what this note already said; the source was not read
+  again.
 
 ## What it says
 - In an analogy, relations between objects are mapped from base to target, while attributes of the objects are not;

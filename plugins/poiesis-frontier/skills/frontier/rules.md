@@ -25,7 +25,7 @@ finding. Words like "shows", "proves" or "the answer is" do not appear in a conc
   scenarios (`SC-…`), questions, sources by their note's name or citation key. `none` when the start is the
   user's question alone.
 - **Starting point:** the tested insight, scenario, gap or question it comes from, with its reference (file, note
-  and page) and how it was tested (insight's challenge verdict, or "untested").
+  and page) and how it was tested, as the gate reports it: copy its line, never a label from the note.
 - **Stage:** sketch, probe, prototype or pilot (`playbooks/experiment.md`). It decides the kind of test.
 - **Assumption:** the one thing that must be true for the concept to work. If there are several, name the riskiest:
   the one most likely to be false and most costly if it is.
@@ -65,9 +65,10 @@ finding. Words like "shows", "proves" or "the answer is" do not appear in a conc
   2007). Stage decides the kind of test, never whether there is one.
 - **A missing feature does not kill a concept.** The kill criterion is about the assumption. Anything new leaves
   things out (Olsen 2007).
-- **Several variants, shown together.** A thing shown alone collects politeness: in one experiment a design seen
-  alone was rated higher and criticised less than the same design seen among three (Tohidi et al. 2006). Build
-  two or three variants before showing any (Dow et al. 2010, one experiment with novices).
+- **Several variants, shown together.** A thing shown alone collects politeness. In one experiment a design seen
+  alone was rated higher than the same design seen among three (for all three designs, significantly for two)
+  and drew more positive comments; nobody who saw one design rejected it (Tohidi et al. 2006). Build two or three
+  variants before showing any (Dow et al. 2010, one experiment with novices).
 - **What the sample can detect, not a guessed effect.** A study design starts from the number of people that can
   be had and says, from `power.py`, what that number can detect (Lakens 2022). An effect size is not assumed in
   order to make a sample look large enough: a plausible effect comes from the project's earlier data or from a
@@ -95,7 +96,8 @@ finding. Words like "shows", "proves" or "the answer is" do not appear in a conc
 - **Estrangement produces questions, not knowledge of people.** Describing a thing as a stranger would, designing
   for an extreme character or removing a function opens concepts. It is not a way of learning about real users
   (Bell, Blythe & Sengers 2005). An extreme character is defined by an attitude to the task, never by a group of
-  people (Djajadiningrat, Gaver & Frens 2000).
+  people: this plugin's rule, after two of the three characters in Djajadiningrat, Gaver & Frens 2000 turned into
+  stereotypes the authors apologise for.
 - **One unusual pairing on an ordinary base.** The recombination playbook keeps a concept conventional except in
   one place. This copies a pattern found in which scientific papers get cited most (Uzzi et al. 2013); as a way
   of generating concepts it is this plugin's analogy and is untested.
