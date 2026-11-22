@@ -41,7 +41,7 @@ finding. Words like "shows", "proves" or "the answer is" do not appear in a conc
 - **The check is a script.** When concepts are saved, `experiments.py gate` looks up every id in a concept's From:
   in the challenge stamps poiesis-insight writes, and in the notes of `insights/` and `foresight/`. A label in a
   note is not the record. In the recorded run of 2026-11-17 one "weakened" was retyped as "kept" on the published
-  page.
+  page (`poiesis-lab-2026-recorded-runs`, observed in the owner's notebook).
 - **Through:** every starting point is kept or weakened, its stamp is intact and its sentence is the one that was
   challenged. A weakened one is used in its narrower form.
 - **Provisional:** a starting point has no stamp, or its stamp or its sentence was changed, or it is a source, a
@@ -162,6 +162,8 @@ more.
   Auger 2013; Eypasch et al. 1995; Yilmaz et al. 2016, on which no rule rests.
 - **A summary on the authors' page, not the paper:** Chan et al. 2015. **An earlier post by the author, not the
   article:** Norman 1999.
+- **Observed:** two recorded runs in the owner's Poiesis Lab notebook (`poiesis-lab-2026-recorded-runs`): one
+  retyped verdict seen in its files; the rest is the lab plan's account of the runs.
 - **Not read:** Tversky & Kahneman 1983, from general knowledge, unverified; Chambers 2013, title only, on which
   no rule rests. De Bono and Dunne & Raby are used as methods only.
 - **Read for version 1.0.0 or 1.1.3, as their notes record it, and not again for 1.2.0:** Gentner 1983 and
