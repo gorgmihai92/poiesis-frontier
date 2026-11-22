@@ -4,6 +4,9 @@
 - **File:** `../papers/meadows-1999-leverage-points.pdf`
 - **Licence:** © The Sustainability Institute, 1999; freely available from the Donella Meadows Project: local only.
 - **Evidence:** analytical (a practitioner's synthesis of system dynamics; the author calls the list tentative).
+- **Read:** not recorded when the note was written (1.0.0): the claims cite pages 3, 5, 8 and 21 of the local PDF.
+  Whether in full is not recorded. Recorded for 1.2.0 from what this note already said; the source was not read
+  again.
 
 ## What it says
 - Twelve places to intervene, from least to most effective: constants and parameters; buffer sizes; the structure

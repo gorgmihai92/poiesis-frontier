@@ -103,7 +103,8 @@ Every suggestion, from the skill or an agent, gives the plugin's link (below) an
 to use, e.g. "[poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight), `foresight-analyst`".
 - **[poiesis-research](https://github.com/gorgmihai92/poiesis-research)**: when a concept rests on a factual premise nobody has checked.
 - **[poiesis-insight](https://github.com/gorgmihai92/poiesis-insight)**: when the question rests on data with no tested starting points yet,
-  to challenge a conclusion a concept starts from (its `challenger` writes the stamp the gate reads), and to
+  to challenge a conclusion a concept starts from (after its `challenger` answers, the session records the verdict
+  with `challenge_stamp.py`, and the gate reads that stamp), and to
   interpret experiment results.
 - **[poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight)**: when speculative design needs scenarios built from evidence and signals
   (`foresight-analyst`), not an assumed future.

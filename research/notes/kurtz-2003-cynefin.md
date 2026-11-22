@@ -4,6 +4,8 @@
 - **File:** none; no open copy. Read: the abstract (OpenAlex). Pages unconfirmed.
 - **Licence:** closed.
 - **Evidence:** analytical (a framework from action research).
+- **Read:** abstract only, from OpenAlex (as the File line says), for 1.0.0. Recorded for 1.2.0 from what this note
+  already said; the source was not read again.
 
 ## What it says
 - Challenges three assumptions common in decision support and strategy: order, rational choice and intent

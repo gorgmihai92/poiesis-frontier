@@ -5,6 +5,8 @@
   could not be downloaded here. Read: the abstract. Pages unconfirmed.
 - **Licence:** open copy on Figshare; licence not checked: local only.
 - **Evidence:** analytical (case studies of the author's and students' projects).
+- **Read:** abstract only (as the File line says), for 1.0.0. Recorded for 1.2.0 from what this note already said;
+  the source was not read again.
 
 ## What it says
 - Speculative design serves two purposes: to help us think about the future, and to critique current practice

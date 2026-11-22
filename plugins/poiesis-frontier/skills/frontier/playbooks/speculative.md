@@ -23,8 +23,10 @@ version.
 
 ## 1. The scenario
 Take one scenario from `foresight/` if the project has it, with its drivers and what holds in every scenario and
-what in one only. Its id (`SC-001`) goes in the concept's From line, so the gate checks its challenge. Without
-one, build the future from the user's question, label it "assumed, not from foresight", and go on: name its 2–3
+what in one only. Its id (`SC-001`) goes in the concept's From line, so the gate checks its challenge.
+poiesis-foresight 0.1.0 writes no stamps, so a concept from a scenario is provisional until the scenario's
+verdict is stamped (poiesis-insight's `challenge_stamp.py` can stamp a scenario: it is a heading with an Id line).
+Without one, build the future from the user's question, label it "assumed, not from foresight", and go on: name its 2–3
 drivers and the assumption under each, and build at least two contrasting futures (or say why one is enough), so
 none reads as a prediction (Phadnis et al. 2015). Then say in one line what would make it more accurate:
 [poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight) (`foresight-analyst`) for scenarios built from evidence and signals,

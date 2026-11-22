@@ -71,14 +71,8 @@ class Playbooks(unittest.TestCase):
             for slug in re.findall(r"`([a-z][a-z-]+-\d{4}-[a-z0-9-]+)`", path.read_text(encoding="utf-8")):
                 self.assertTrue((NOTES / f"{slug}.md").is_file(), f"{path.name}: {slug}")
 
-    def test_every_note_says_how_much_was_read_for_this_version(self):
-        old = {"abson-2017-leverage-points", "auger-2013-speculative-design", "chan-2015-near-far-inspiration",
-               "gentner-1983-structure-mapping", "gick-1980-analogical-problem-solving", "kurtz-2003-cynefin",
-               "meadows-1999-leverage-points", "norman-1999-affordance-conventions", "phadnis-2015-scenario-planning",
-               "tversky-1983-conjunction-fallacy", "vanbeurden-2011-cynefin"}  # written for 1.0.0 to 1.1.3
+    def test_every_note_says_how_much_was_read(self):
         for note in sorted(NOTES.glob("*.md")):
-            if note.stem in old:
-                continue
             self.assertRegex(note.read_text(encoding="utf-8"), r"\n- \*\*Read:\*\* ", note.name)
 
     def test_playbooks_say_power_py_and_the_gate_the_way_the_scripts_are_called(self):
