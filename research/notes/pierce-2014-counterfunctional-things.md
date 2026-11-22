@@ -20,7 +20,7 @@
   questions) or useful (p. 3).
 - People's reactions varied widely. One camera that hides its pictures until it is broken open was the favourite
   of 4 of the 8; five wanted to use it (p. 7). One whose pictures decay while viewed was called useless by all 8,
-  although it was the one that appealed to the designers (p. 8).
+  although it appealed to the designers as an idea (p. 8).
 - Three things to watch in such a design: whether it is interesting to use or only interesting to think about;
   whether new features added next to the removal hide the removal; and whether it recalls an older technology,
   which made a limit easier to accept (p. 9–10).
@@ -30,8 +30,8 @@
 ## What it means for the plugin
 - One operator in the estrangement playbook: remove or reverse a function the thing is known for, then write what
   becomes possible. The three lines are quoted from the paper as a prompt, not as a method it endorses.
-- The designers' favourite was the one every participant rejected. A concept from this operator goes to people
-  early, and "interesting to think about" is recorded apart from "would use".
+- A design the designers found appealing as an idea was the one every participant rejected. A concept from this
+  operator goes to people early, and "interesting to think about" is recorded apart from "would use".
 - Eight people, one medium (cameras), first reactions. It shows the operator produces concepts some people want,
   not how often.
 
