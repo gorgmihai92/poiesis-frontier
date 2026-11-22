@@ -3,6 +3,8 @@
 The published values and where each was read are in research/notes: gpower-2023-manual.md and
 lakens-2022-sample-size-justification.md.
 """
+from __future__ import annotations
+
 import math
 import random
 import unittest
