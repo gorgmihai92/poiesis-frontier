@@ -1,0 +1,13 @@
+7 experiments: 2 planned, 2 running, 1 kept, 1 killed, 1 inconclusive
+Finished: 3; killed 1 of them (33%)
+
+Past their due date, not finished:
+  E-002 (due 2026-02-01, running): Running past its due date
+
+Breaks the rules:
+  E-005: inconclusive but no result
+  E-006: no kill criterion
+  E-006: kill criterion not dated
+  E-007: kill criterion written 2026-03-10, after the start 2026-03-01
+
+Rows not understood: E-008, E-009
