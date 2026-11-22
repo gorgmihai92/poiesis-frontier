@@ -14,6 +14,7 @@ file as before.
 - **Tests.** `test_templates.py`: the block in each template and its rules; the log check, the gate (with and
   without `--write`) and `ids` giving the same results with the block on a report, on the log and on the insight
   report the gate reads.
+- **Docs.** The README's Design row names `poiesis-studio`, as the other READMEs do.
 - **Not checked in this version:** how Obsidian shows the properties (no vault was opened), and any run on a topic.
 
 ## 1.2.0
