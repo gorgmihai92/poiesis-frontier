@@ -7,9 +7,10 @@ before anyone takes part.
 ## Read first
 Notes in `research/notes` of the plugin's repository:
 - `tohidi-2006-testing-many-is-better`, read in full. One experiment, 48 students, paper prototypes of a
-  thermostat. A design seen alone was rated higher and criticised less than the same design seen among three;
-  nobody who saw one design rejected it, three of twelve who saw three rejected one. Seeing three did not bring
-  more suggestions.
+  thermostat. A design seen alone was rated higher than the same design seen among three (for all three
+  designs, significantly for two, one-tailed) and drew more positive comments; negative comments rose
+  significantly for one design. Nobody who saw one design rejected it; three of twelve who saw three rejected one.
+  Seeing three did not bring more suggestions.
 - `dow-2010-parallel-prototyping`, read in full. One experiment, 33 novices making a web advertisement: building
   several prototypes before any feedback did better than getting feedback after each.
 - `lakens-2022-sample-size-justification`, read in part. When resources set the sample, say what that sample can
@@ -32,7 +33,7 @@ Choose by what the concept claims and the stage it is at (`playbooks/experiment.
 
 ## 2. Variants, not one design
 - Make two or three variants that differ in the one thing the concept is about, and show them together. A
-  design shown alone collects higher ratings and fewer criticisms (Tohidi et al. 2006).
+  design shown alone collects higher ratings and more praise, and nobody rejects it (Tohidi et al. 2006).
 - Build the variants before showing any of them, and collect the reactions to all of them together. Feedback
   after each pulls toward repairing that one (Dow et al. 2010, novices, one kind of task).
 - Ask people for problems, preferences and what they would reject. Do not ask them to design: in Tohidi et al.

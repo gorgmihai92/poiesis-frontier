@@ -5,6 +5,8 @@
   abstract. Pages unconfirmed.
 - **Licence:** closed (repository copy free to read).
 - **Evidence:** empirical (a series of experiments).
+- **Read:** abstract only (as the File line says), for 1.0.0. Recorded for 1.2.0 from what this note already said;
+  the source was not read again.
 
 ## What it says
 - In all experiments, people who first read a story about a military problem and its solution tended to produce

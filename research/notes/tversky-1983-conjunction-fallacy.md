@@ -5,6 +5,8 @@
 - **Licence:** © APA: closed.
 - **Evidence:** empirical (series of judgment experiments) · **reference only**: the summary below is from general
   knowledge, unverified against the text.
+- **Read:** not read: reference only, from general knowledge, unverified (as the Evidence line says). Recorded for
+  1.2.0 from what this note already said; the source was not read again.
 
 ## What it says (from general knowledge, unverified)
 - People judge a conjunction of events ("A and B") as more probable than one of its parts ("A"), although it can

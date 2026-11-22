@@ -6,6 +6,8 @@
 - **Licence:** closed.
 - **Evidence:** empirical (hundreds of concepts across about a dozen design challenges on an online innovation
   platform that records which sources each concept builds on).
+- **Read:** the authors' summary on their lab page, not the paper (as the File line says), for 1.0.0. Recorded for
+  1.2.0 from what this note already said; the source was not read again.
 
 ## What it says
 - Building on sources went with more creative ideas, but conceptually closer sources were more beneficial than far

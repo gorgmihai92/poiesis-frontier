@@ -52,8 +52,8 @@ step 2: its assumptions were contested there. Otherwise:
 10. Ask of each version: would it teach something the field does not already assume? Would the second version be
     worth reporting? If neither would, drop the study or change it. If only the hoped-for version would, the
     study cannot fail in an informative way: reshape it (`playbooks/experiment.md`, "Can it fail?").
-11. Both versions stay in the frontier note under a heading "Imagined". They are never saved in
-    `frontier/results/`, never cited, and never shown without their first line.
+11. Both versions go in the study design, under its heading "Imagined" (`templates/study.md`). They are never
+    saved in `frontier/results/`, never cited, and never shown without their first line.
 
 ## 3. A protocol before the data
 12. Write the study design from `templates/study.md` and `playbooks/study.md`, before any data exist: the
@@ -70,8 +70,7 @@ step 2: its assumptions were contested there. Otherwise:
     the experiment (`playbooks/experiment.md`, "Log").
 
 ## Out
-- In the frontier note: the table of assumptions, the one contested and its alternative, the question, the two
-  imaginary abstracts under "Imagined".
-- In `frontier/studies/`: the protocol.
+- In the frontier note: the table of assumptions, the one contested and its alternative, the question.
+- In `frontier/studies/`: the protocol, with the two imaginary abstracts under "Imagined".
 - In the chat: the question, what each version of the abstract would teach, what the sample can detect, and
   **Not checked**. No sentence in any of them reports the imagined finding as a result.
