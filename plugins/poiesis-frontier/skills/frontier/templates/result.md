@@ -1,3 +1,13 @@
+---
+type: result
+plugin: poiesis-frontier
+date: <YYYY-MM-DD, the last day it ran>
+topic: "<the concept, in a few words>"
+id: "<E-001, the experiment's id in the log>"
+status: "<the status against the kill criterion: kept / killed / inconclusive>"
+from:
+  - "[[<the concept's id, CN-001>]]"
+---
 # <E-001>: <concept in a few words>
 
 - **Concept:** <link to the frontier note>
