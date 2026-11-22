@@ -473,6 +473,8 @@ def main() -> int:
         value = getattr(a, name, None)
         if value is not None and not 0.0 < value < 1.0:
             ap.error(f"--{name} has to be between 0 and 1")
+    if getattr(a, "alpha", 0.05) < 0.0001:
+        ap.error("--alpha below 0.0001 is not computed here: the numbers lose accuracy for very small samples")
     for name in ("rate", "p"):
         for value in getattr(a, name, None) or []:
             if not 0.0 <= value <= 1.0:

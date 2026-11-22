@@ -256,7 +256,8 @@ class CommandLine(unittest.TestCase):
     def test_rates_and_power_outside_their_range_are_refused(self):
         for argv in (["count", "--n", "8", "--at-least", "3", "--if", "1.5"], ["see", "--n", "5", "--p", "2"],
                      ["detect", "--n", "8", "--power", "1.2"], ["n", "--d", "0.5", "--power", "0.01"],
-                     ["see", "--n", "5", "--times", "0"], ["two", "--n", "81"]):
+                     ["see", "--n", "5", "--times", "0"], ["two", "--n", "81"],
+                     ["detect", "--n", "3", "--alpha", "0.00001"]):
             code, _, err = helpers.run(power, argv)
             self.assertEqual(code, 2, argv)
             self.assertTrue(err, argv)

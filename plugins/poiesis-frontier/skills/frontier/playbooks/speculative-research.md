@@ -52,7 +52,8 @@ step 2: its assumptions were contested there. Otherwise:
 10. Ask of each version: would it teach something the field does not already assume? Would the second version be
     worth reporting? If neither would, drop the study or change it. If only the hoped-for version would, the
     study cannot fail in an informative way: reshape it (`playbooks/experiment.md`, "Can it fail?").
-11. Both versions go in the study design, under its heading "Imagined" (`templates/study.md`). They are never
+11. Keep both versions for the study design written in step 12, under its heading "Imagined"
+    (`templates/study.md`). They are never
     saved in `frontier/results/`, never cited, and never shown without their first line.
 
 ## 3. A protocol before the data

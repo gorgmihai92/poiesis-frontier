@@ -417,6 +417,16 @@ class WhatTheGateRefuses(Project):
             code, out = self.gate(concept("CN-001", start))
             self.assertIn("STOPPED CN-001: IN-002 was dropped", out, start)
 
+    def test_from_as_a_nested_list_and_ids_mixed_with_keys(self):
+        code, out = self.gate("### If A, then B.\n\n- **Id:** CN-001\n- **From:**\n  - IN-001\n  - IN-002\n")
+        self.assertIn("STOPPED CN-001: IN-002 was dropped", out)
+        self.assertEqual(ex.from_ids("IN-001 and walters-2023"), ["IN-001", "walters-2023"])
+        self.assertEqual(ex.from_ids("notes-on-IN-002-rebuttal"), ["notes-on-IN-002-rebuttal"])
+
+    def test_prose_under_from_that_is_not_indented_is_not_read_as_from(self):
+        code, out = self.gate("### If A, then B.\n\n- **Id:** CN-001\n- **From:** IN-001\nSee IN-002 for why not.\n")
+        self.assertIn("THROUGH CN-001", out)
+
     def test_a_dropped_conclusion_under_two_headings_still_stops(self):
         copy = self.insight.read_text(encoding="utf-8")
         (self.root / "insights" / "archive-copy.md").write_text(copy, encoding="utf-8")
