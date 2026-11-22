@@ -326,8 +326,8 @@ def gate_concept(block: dict, stamps: dict, damaged: str | None, found: dict, st
         return {"state": "stopped", "why": _list(stops) + (" was" if len(stops) == 1 else " were") + " dropped",
                 "starts": [t for _, t in checks], "record": record}
     if opens:
-        return {"state": "provisional", "why": _list(opens) + (" was" if len(opens) == 1 else " were")
-                + " not challenged on record", "starts": [t for _, t in checks], "record": record}
+        return {"state": "provisional", "why": _list(opens) + " could not be verified",
+                "starts": [t for _, t in checks], "record": record}
     return {"state": "through", "why": "every starting point is kept or weakened, with its stamp",
             "starts": [t for _, t in checks], "record": record}
 
