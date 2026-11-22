@@ -1,3 +1,9 @@
+---
+type: experiment-log
+plugin: poiesis-frontier
+date: <YYYY-MM-DD, the day the log was started>
+topic: "<the project, in a few words>"
+---
 # Experiment log
 
 One row per experiment. The assumption, prediction and kill criterion are written (and `criterion written` dated)
