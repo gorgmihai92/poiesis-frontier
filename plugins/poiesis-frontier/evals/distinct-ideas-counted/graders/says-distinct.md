@@ -1,4 +1,5 @@
 ---
 type: regex
-pattern: '(?i)distinct'
+pattern: 'distinct'
+flags: i
 ---

@@ -82,6 +82,18 @@ class SecondCalculation(unittest.TestCase):
         for t in (-3.0, -0.5, 0.0, 0.7, 2.0, 12.706):
             self.assertAlmostEqual(power.t_cdf(t, 1), 0.5 + math.atan(t) / math.pi, places=6)
 
+    def test_one_degree_of_freedom_holds_far_into_the_tail(self):
+        for alpha in (0.01, 0.005, 0.002, 0.001):
+            exact = 1 / math.tan(math.pi * alpha / 2)  # the Cauchy distribution's two-sided critical value
+            self.assertAlmostEqual(power.t_crit(1, alpha) / exact, 1.0, places=5)
+            self.assertAlmostEqual(power.critical_d(2, paired=True, alpha=alpha), exact / math.sqrt(2), delta=exact * 1e-5)
+
+    def test_noncentral_t_with_one_degree_of_freedom_matches_a_simulation(self):
+        rng = random.Random(7)
+        delta, t, runs = 3.0, 25.0, 200_000
+        below = sum((rng.gauss(0, 1) + delta) / abs(rng.gauss(0, 1)) <= t for _ in range(runs))
+        self.assertAlmostEqual(power.t_cdf(t, 1, delta), below / runs, delta=0.004)
+
     def test_central_t_with_2_degrees_of_freedom_has_a_closed_form(self):
         for t in (-4.0, -1.0, 0.0, 0.5, 2.92, 9.0):
             self.assertAlmostEqual(power.t_cdf(t, 2), 0.5 + t / (2 * math.sqrt(2 + t * t)), places=7)
@@ -240,6 +252,14 @@ class CommandLine(unittest.TestCase):
         for argv in (["detect", "--n", "0"], ["detect", "--n", "8", "--alpha", "1.5"], ["rate", "--n", "5", "--k", "9"]):
             code, _, err = helpers.run(power, argv)
             self.assertEqual(code, 2, argv)
+
+    def test_rates_and_power_outside_their_range_are_refused(self):
+        for argv in (["count", "--n", "8", "--at-least", "3", "--if", "1.5"], ["see", "--n", "5", "--p", "2"],
+                     ["detect", "--n", "8", "--power", "1.2"], ["n", "--d", "0.5", "--power", "0.01"],
+                     ["see", "--n", "5", "--times", "0"], ["two", "--n", "81"]):
+            code, _, err = helpers.run(power, argv)
+            self.assertEqual(code, 2, argv)
+            self.assertTrue(err, argv)
 
     def test_one_person_per_group_is_refused_with_a_reason(self):
         for argv in (["detect", "--n", "1"], ["power", "--n", "1", "--d", "0.5"], ["detect", "--n", "1", "--paired"]):

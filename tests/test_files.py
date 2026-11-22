@@ -37,6 +37,14 @@ class EvalCases(unittest.TestCase):
                 kind = front_matter(g.read_text(encoding="utf-8")).get("type", "").strip()
                 self.assertIn(kind, ("llm", "regex", "tool_used"), g)
 
+    def test_no_grader_pattern_uses_an_inline_flag(self):
+        # claude plugin eval compiles patterns with JavaScript's RegExp, which rejects (?i) and the like; a flag
+        # goes in a `flags:` line, as in the cases of poiesis-research.
+        for g in EVALS.rglob("graders/*.md"):
+            meta = front_matter(g.read_text(encoding="utf-8"))
+            for key in ("pattern", "input_match"):
+                self.assertNotRegex(meta.get(key, ""), r"\(\?[a-zA-Z]", g)
+
     def test_the_readme_lists_every_case(self):
         readme = (EVALS / "README.md").read_text(encoding="utf-8")
         for case in self.cases():
