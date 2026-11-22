@@ -39,28 +39,36 @@ from pathlib import Path
 STATUSES = ("planned", "running", "kept", "killed", "inconclusive")
 FINISHED = ("kept", "killed", "inconclusive")
 
-# The challenge stamp, format 1 (poiesis-insight 2.0.0). Verified here with this script's own code, so the gate
-# works when poiesis-insight is not installed.
+# The challenge stamp, format 1 (poiesis-insight 2.0.0; the reference is its skills/insight/stamp-format.md).
+# Verified here with this script's own code, so the gate works when poiesis-insight is not installed. The patterns
+# for reading a note are the reference's, copied as they are.
 SEAL_HEAD = "poiesis-challenge-stamp v1"
 VERDICTS = ("kept", "weakened", "dropped")
 STAMPS = "insights/challenge-stamps.jsonl"
 NOTE_FOLDERS = ("insights", "foresight")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
-DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+STAMP_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 HEADING = re.compile(r"^#{1,6}[ \t]+(.*)$")
-FENCE = re.compile(r"^[ \t]*(```|~~~)")
-ID_LINE = re.compile(r"^[ \t]*[-*+][ \t]+\*\*id:?\*\*:?[ \t]*(\S+)[ \t]*$", re.IGNORECASE)
+FENCE = re.compile(r"^[ \t]*(`{3,}|~{3,})")
+ID_LINE = re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:\*\*)?|\*\*)id(?:\*\*)?[ \t]*:(?:\*\*)?[ \t]*(\S+)[ \t]*$", re.IGNORECASE)
+CHALLENGE = re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:[*_]{1,2})?|[*_]{1,2})challenge[a-z ]*?(?:[*_]{1,2})?[ \t]*"
+                       r"(?::(?:[*_]{1,2})?|(?:[*_]{1,2})?:|[*_]{2}[ \t])[ \t]*(.*)$", re.IGNORECASE)
+VERDICT_WORD = re.compile(r"\b(kept|weakened|dropped)\b", re.IGNORECASE)
+NEGATION = re.compile(r"\b(?:not|no|never|un\w*)\b", re.IGNORECASE)
 CHECKED = re.compile(r"[ \t]*·[ \t]*checked \d{4}-\d{2}-\d{2}[ \t]*$")
 PREFIXES = {"CN": "a concept", "ST": "a study design", "E": "an experiment"}
 NOTHING = {"", "none", "-", "–", "—", "n/a"}
 
 
 def field(name: str) -> re.Pattern:
-    """A line such as `- **Challenge:** kept · reason`, whatever the case of the name."""
-    return re.compile(r"^[ \t]*[-*+][ \t]+\*\*" + name + r":?\*\*:?[ \t]*(.*)$", re.IGNORECASE)
+    """A line such as `- **From:** IN-001`, whatever the case of the name, read like the reference's Id line:
+    the list dash and the bold marks may be left out, the colon may not."""
+    return re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:\*\*)?|\*\*)" + name + r"(?:\*\*)?[ \t]*:(?:\*\*)?[ \t]*(.*)$",
+                      re.IGNORECASE)
 
 
-CHALLENGE, FROM, PROVISIONAL, STOPPED = field("challenge"), field("from"), field("provisional"), field("stopped")
+FROM, PROVISIONAL, STOPPED = field("from"), field("provisional"), field("stopped")
 STARTING_POINT, LOG_ID = field("starting point"), field("log id")
 
 
@@ -148,14 +156,19 @@ def blocks(text: str) -> list[dict]:
     end excluded), fields (line numbers of the lines that are not in fenced code).
     """
     out: list[dict] = []
-    fenced = False
-    lines = text.split("\n")
+    fence = ""  # the mark that opened the fenced block we are in, or ''
+    lines = text.split("\n")  # at line feeds only
     for i, raw in enumerate(lines):
-        line = raw.rstrip("\r")
-        if FENCE.match(line):
-            fenced = not fenced
+        line = raw[:-1] if raw.endswith("\r") else raw
+        hit = FENCE.match(line)
+        if hit:
+            mark = hit.group(1)
+            if not fence:
+                fence = mark
+            elif mark[0] == fence[0] and len(mark) >= len(fence) and not line.strip()[len(mark):].strip():
+                fence = ""
             continue
-        if fenced:
+        if fence:
             continue
         m = HEADING.match(line)
         if m:
@@ -172,7 +185,8 @@ def blocks(text: str) -> list[dict]:
 def first(block: dict, pattern: re.Pattern) -> tuple[int, str] | None:
     """The first line of the block that matches: (line number, what follows the field's name)."""
     for i in block["fields"]:
-        m = pattern.match(block["lines"][i].rstrip("\r"))
+        line = block["lines"][i]
+        m = pattern.match(line[:-1] if line.endswith("\r") else line)
         if m:
             return i, m.group(1)
     return None
@@ -183,13 +197,18 @@ def block_id(block: dict) -> str | None:
     return found[1] if found else None
 
 
-def shown_verdict(block: dict) -> str | None:
-    """The first word of the Challenge line, in lower case: `**Kept** · …` gives kept."""
+def shown_verdicts(block: dict) -> tuple[str, ...] | None:
+    """The verdict words of the Challenge label, in lower case and in order, up to the `·` that starts its reason.
+
+    None when there is no label. `**Kept** · …` gives (kept,); `weakened → kept` gives both; a label with a word
+    of negation, such as `not challenged` or `not weakened`, gives none.
+    """
     found = first(block, CHALLENGE)
     if not found:
         return None
-    word = re.search(r"[A-Za-z]+", found[1])
-    return word.group(0).lower() if word else ""
+    head = found[1].split("·")[0]
+    words = tuple(dict.fromkeys(w.lower() for w in VERDICT_WORD.findall(head)))
+    return () if words and NEGATION.search(head) else words
 
 
 def load_stamps(path: Path) -> tuple[dict[str, tuple[int, dict]], str | None]:
@@ -208,8 +227,8 @@ def load_stamps(path: Path) -> tuple[dict[str, tuple[int, dict]], str | None]:
             obj = json.loads(line)
         except ValueError:
             return {}, f"line {n} is not JSON"
-        if not isinstance(obj, dict) or not isinstance(obj.get("id"), str):
-            return {}, f"line {n} is not a stamp"
+        if not isinstance(obj, dict) or not isinstance(obj.get("id"), str) or not STAMP_ID.match(obj["id"]):
+            return {}, f"line {n} is not a stamp with a readable id"
         last[obj["id"]] = (n, obj)
     return last, None
 
@@ -218,12 +237,20 @@ def stamp_intact(obj: dict) -> bool:
     v = obj.get("v")
     verdict, date, sha = obj.get("verdict"), obj.get("date"), obj.get("text_sha256")
     return (
-        type(v) is not bool and v == 1
+        type(v) is int and v == 1
         and verdict in VERDICTS
-        and isinstance(date, str) and bool(DATE.match(date))
+        and isinstance(date, str) and bool(DATE.match(date)) and _real_date(date)
         and isinstance(sha, str) and bool(HEX64.match(sha))
         and obj.get("seal") == seal(obj["id"], verdict, date, sha)
     )
+
+
+def _real_date(value: str) -> bool:
+    try:
+        dt.date.fromisoformat(value)
+        return True
+    except ValueError:
+        return False
 
 
 def conclusions(folders: list[Path], extra: list[Path]) -> dict[str, list[tuple[Path, dict]]]:
@@ -272,11 +299,19 @@ def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps
     """
     places = found.get(id_, [])
     block = places[0][1] if len(places) == 1 else None
-    shown = shown_verdict(block) if block else None
-    said = f'the note shows "{shown}"' if shown in VERDICTS else ""
+    shown = shown_verdicts(block) if block else None
+    said = f'the note shows "{" and ".join(shown)}"' if shown else ""
+
+    def drift(verdict: str) -> str:
+        """What the label says against the stamp; the stamp is the record."""
+        if shown is None or shown == (verdict,):
+            return ""
+        if not shown:
+            return " (the note's label holds no verdict: the stamp is the record)"
+        return f" ({said}: the stamp is the record)"
 
     def stop_on_label(why: str) -> tuple[str, str] | None:
-        return ("stop", f"{id_} the note says dropped ({why})") if shown == "dropped" else None
+        return ("stop", f"{id_} the note says dropped ({why})") if shown and "dropped" in shown else None
 
     if len(places) > 1:
         names = ", ".join(sorted({_rel(p, root) for p, _ in places}))
@@ -312,10 +347,10 @@ def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps
         return stop_on_label(f"its sentence was changed after it was stamped {verdict} on {date}") or (
             "open", f"{id_} text changed: the sentence is not the one stamped {verdict} on {date}")
     if verdict == "dropped":
-        return "stop", f"{id_} dropped {date}" + (f" ({said}: the stamp is the record)" if said and shown != verdict else "")
-    if shown == "dropped":
+        return "stop", f"{id_} dropped {date}" + drift(verdict)
+    if shown and "dropped" in shown:
         return "stop", f"{id_} the note says dropped (the stamp says {verdict}, {date}: one of the two is wrong)"
-    return "ok", f"{id_} {verdict} {date}" + (f" ({said}: the stamp is the record)" if said and shown != verdict else "")
+    return "ok", f"{id_} {verdict} {date}" + drift(verdict)
 
 
 def _rel(path: Path, root: Path) -> str:
