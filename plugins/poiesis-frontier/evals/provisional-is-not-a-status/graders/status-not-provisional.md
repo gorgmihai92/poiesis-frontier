@@ -1,5 +1,6 @@
 ---
 type: regex
-pattern: '(?i)\|\s*provisional\s*\|'
+pattern: '\|\s*provisional\s*\|'
+flags: i
 match: not_contains
 ---

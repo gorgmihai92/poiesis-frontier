@@ -53,13 +53,25 @@ def t_cdf(t: float, df: float, delta: float = 0.0) -> float:
     """
     half = 12.0 / math.sqrt(2.0 * df)
     lo, hi = max(0.0, 1.0 - half), 1.0 + half
-    h = (hi - lo) / STEPS
+    if df < 3:  # W has a heavy left part when df is small: integrate it from 0
+        lo, hi = 0.0, 1.0 + 40.0 / math.sqrt(df)
+    cuts = {lo, hi}
+    if t != 0.0:  # phi(t*w - delta) turns from 0 to 1 within a few 1/|t| of w = delta/t: integrate that part finely
+        w0, width = delta / t, 12.0 / abs(t)
+        cuts.update(min(hi, max(lo, x)) for x in (w0 - width, w0 + width))
+    edges = sorted(cuts)
     total = 0.0
-    for i in range(STEPS + 1):
-        w = lo + i * h
-        weight = 1 if i in (0, STEPS) else (4 if i % 2 else 2)
-        total += weight * phi(t * w - delta) * _w_density(w, df)
-    return min(1.0, max(0.0, total * h / 3.0))
+    for a, b in zip(edges, edges[1:]):
+        if b <= a:
+            continue
+        h = (b - a) / STEPS
+        part = 0.0
+        for i in range(STEPS + 1):
+            w = a + i * h
+            weight = 1 if i in (0, STEPS) else (4 if i % 2 else 2)
+            part += weight * phi(t * w - delta) * _w_density(w, df)
+        total += part * h / 3.0
+    return min(1.0, max(0.0, total))
 
 
 def t_crit(df: float, alpha: float = 0.05, two_sided: bool = True) -> float:
@@ -351,8 +363,9 @@ def cmd_count(a: argparse.Namespace) -> int:
 
 def cmd_two(a: argparse.Namespace) -> int:
     n2 = a.n2 or a.n
-    if max(a.n, n2) > 300:
-        print("Groups above 300 are not computed exactly here.", file=sys.stderr)
+    if max(a.n, n2) > 80:
+        print("Groups above 80 are not computed here: the exact sum gets slow, and at that size a study is no "
+              "longer the small one this script is for.", file=sys.stderr)
         return 2
     print(f"two groups of {a.n} and {n2}, a yes/no outcome (Fisher's exact test, two-sided, alpha {a.alpha:g})")
     sig = fisher_significant(a.n, n2, a.alpha)
@@ -460,6 +473,16 @@ def main() -> int:
         value = getattr(a, name, None)
         if value is not None and not 0.0 < value < 1.0:
             ap.error(f"--{name} has to be between 0 and 1")
+    for name in ("rate", "p"):
+        for value in getattr(a, name, None) or []:
+            if not 0.0 <= value <= 1.0:
+                ap.error(f"--{'if' if name == 'rate' else name} takes a rate between 0 and 1")
+    power_ = getattr(a, "power", None)
+    for value in (power_ if isinstance(power_, list) else [power_] if power_ is not None else []):
+        if not getattr(a, "alpha", 0.0) < value < 1.0:
+            ap.error("--power has to be above alpha and below 1")
+    if getattr(a, "times", 1) < 1:
+        ap.error("--times has to be at least 1")
     try:
         return a.run(a)
     except ValueError as e:
