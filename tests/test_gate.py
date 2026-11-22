@@ -1,8 +1,10 @@
 """The entry gate of experiments.py, on the stamps poiesis-insight writes.
 
-fixtures/challenge-stamp-vectors.json and fixtures/gate/ are copies, byte for byte, of what the Insight 2.0.0
-session left on 2026-11-22: three test vectors for the stamp format, and three conclusions (one kept and stamped,
-one dropped and stamped, one never challenged) whose stamps were written by its challenge_stamp.py.
+fixtures/challenge-stamp-vectors.json and fixtures/gate/ are copies, byte for byte, of `tests/vectors/
+challenge-stamp.json` and `tests/fixtures/gate/` in gorgmihai92/poiesis-insight at 229aa06 (2.0.0): three test
+vectors for the stamp format, and three conclusions (one kept and stamped, one dropped and stamped, one never
+challenged) whose stamps were written by its challenge_stamp.py. The reading rules tested here are those of its
+`plugins/poiesis-insight/skills/insight/stamp-format.md` at the same commit.
 """
 from __future__ import annotations
 
@@ -103,7 +105,7 @@ class StampFormat(unittest.TestCase):
         found = [b for b in ex.blocks(v["note"]) if ex.block_id(b) == "IN-003"]
         self.assertEqual(len(found), 1)
         self.assertEqual(found[0]["heading"], v["text"])
-        self.assertEqual(ex.shown_verdict(found[0]), "dropped")
+        self.assertEqual(ex.shown_verdicts(found[0]), ("dropped",))
         self.assertEqual(ex.text_sha256(found[0]["heading"]), v["stamp"]["text_sha256"])
 
     def test_layout_is_folded_and_nothing_else_is(self):
@@ -132,6 +134,52 @@ class StampFormat(unittest.TestCase):
                        {"text_sha256": good["text_sha256"].upper()}, {"seal": "0" * 64}, {"verdict": "split"}):
             self.assertFalse(ex.stamp_intact({**good, **change}), change)
         self.assertTrue(ex.stamp_intact({**good, "by": "inline", "again": "new data", "unknown": 3}))
+
+
+class ReadingANote(unittest.TestCase):
+    """The reference's rules for reading a note."""
+
+    def block(self, text: str) -> dict:
+        found = [b for b in ex.blocks(text) if ex.block_id(b)]
+        self.assertEqual(len(found), 1, text)
+        return found[0]
+
+    def test_an_id_line_may_lose_its_dash_or_its_bold_but_not_its_colon(self):
+        for line in ("- **Id:** IN-001", "**Id:** IN-001", "- **Id**: IN-001", "- Id: IN-001", "* **id:** IN-001"):
+            self.assertEqual(ex.block_id(self.block(f"### A.\n\n{line}\n")), "IN-001", line)
+        self.assertEqual([b for b in ex.blocks("### A.\n\n- **Id** IN-001\n") if ex.block_id(b)], [])
+
+    def test_a_label_gives_its_verdict_words_and_none_when_negated(self):
+        cases = {"- **Challenge:** **Kept** · reason": ("kept",),
+                 "- **Challenge:** weakened → kept after review": ("weakened", "kept"),
+                 "- **Challenge:** not challenged · later": (),
+                 "- **Challenge:** not weakened": (),
+                 "- **Challenged:** dropped": ("dropped",),
+                 "- **Challenge result:** weakened": ("weakened",),
+                 "- **Challenge:** kept · not dropped, see below": ("kept",)}
+        for line, want in cases.items():
+            self.assertEqual(ex.shown_verdicts(self.block(f"### A.\n\n- **Id:** IN-001\n{line}\n")), want, line)
+
+    def test_a_plain_line_that_starts_with_challenge_is_prose(self):
+        self.assertIsNone(ex.shown_verdicts(self.block("### A.\n\n- **Id:** IN-001\nChallenge: kept\n")))
+
+    def test_a_fence_closes_only_with_its_own_mark_at_least_as_long(self):
+        text = "````\n```\n### Hidden.\n\n- **Id:** IN-009\n````\n### Seen.\n\n- **Id:** IN-001\n"
+        self.assertEqual([ex.block_id(b) for b in ex.blocks(text) if ex.block_id(b)], ["IN-001"])
+        text = "~~~\n### Hidden.\n- **Id:** IN-009\n~~~ not a close\n### Still hidden.\n- **Id:** IN-008\n~~~\n"
+        self.assertEqual([b for b in ex.blocks(text) if ex.block_id(b)], [])
+
+    def test_lines_are_split_at_line_feeds_only(self):
+        heading = "Growth\u2028slowed."
+        block = self.block(f"### {heading}\r\n\r\n- **Id:** IN-001\r\n")
+        self.assertEqual(block["heading"], heading)
+
+    def test_a_stamp_written_as_1_0_or_with_an_impossible_date_is_not_intact(self):
+        good = VECTORS[0]["stamp"]
+        self.assertFalse(ex.stamp_intact({**good, "v": 1.0}))
+        bad_day = "2026-02-30"
+        self.assertFalse(ex.stamp_intact({**good, "date": bad_day,
+                                          "seal": ex.seal(good["id"], good["verdict"], bad_day, good["text_sha256"])}))
 
 
 class ThreeConclusions(Project):
@@ -261,10 +309,27 @@ class WhatTheGateRefuses(Project):
         self.assertIn("IN-001 stamp file damaged (line 3 is not JSON): no verdict in it can be trusted", out)
         self.assertIn("Stamps: insights/challenge-stamps.jsonl is damaged (line 3 is not JSON).", out)
 
+    def test_a_line_with_an_unreadable_id_damages_the_file(self):
+        with self.stamps.open("a", encoding="utf-8") as f:
+            f.write(stamp_line("-IN-1", "kept", "2026-11-22", "x"))
+        self.assertIn("line 3 is not a stamp with a readable id", self.gate(concept("CN-001", "IN-001"))[1])
+
+    def test_a_label_with_two_verdicts_is_reported_and_the_stamp_is_used(self):
+        self.edit(self.insight, "- **Challenge:** kept ·", "- **Challenge:** weakened → kept ·")
+        code, out = self.gate(concept("CN-001", "IN-001"))
+        self.assertIn("THROUGH CN-001", out)
+        self.assertIn('IN-001 kept 2026-11-17 (the note shows "weakened and kept": the stamp is the record)', out)
+
+    def test_a_stamped_conclusion_labelled_not_challenged_goes_by_its_stamp(self):
+        self.edit(self.insight, "- **Challenge:** kept ·", "- **Challenge:** not challenged ·")
+        code, out = self.gate(concept("CN-001", "IN-001"))
+        self.assertIn("THROUGH CN-001", out)
+        self.assertIn("IN-001 kept 2026-11-17 (the note's label holds no verdict: the stamp is the record)", out)
+
     def test_a_line_that_is_json_but_not_a_stamp_damages_the_file(self):
         with self.stamps.open("a", encoding="utf-8") as f:
             f.write('["IN-001"]\n')
-        self.assertIn("line 3 is not a stamp", self.gate(concept("CN-001", "IN-001"))[1])
+        self.assertIn("line 3 is not a stamp with a readable id", self.gate(concept("CN-001", "IN-001"))[1])
 
     def test_the_last_line_for_an_id_is_the_one_in_force(self):
         with self.stamps.open("a", encoding="utf-8") as f:
