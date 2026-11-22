@@ -6,6 +6,8 @@
   Pages unconfirmed.
 - **Licence:** closed.
 - **Evidence:** analytical (an essay on a concept).
+- **Read:** the 1998 post the article was polished from, not the article (as the File line says), for 1.0.0.
+  Recorded for 1.2.0 from what this note already said; the source was not read again.
 
 ## What it says
 - There are real and perceived affordances, and the two need not be the same.

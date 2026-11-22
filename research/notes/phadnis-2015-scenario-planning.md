@@ -4,6 +4,8 @@
 - **File:** none here (an author's manuscript is kept locally in poiesis-insight; pages = PDF pages)
 - **Licence:** author's manuscript: local only.
 - **Evidence:** empirical · three field experiments with experts judging long-range investments (p. 1).
+- **Read:** not recorded when the note was written (1.1.3): its one claim cites page 1 of an author's manuscript.
+  Recorded for 1.2.0 from what this note already said; the source was not read again.
 
 ## What it says
 - Using multiple scenarios did not raise or lower experts' overall confidence; judgments moved with how an

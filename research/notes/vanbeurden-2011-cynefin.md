@@ -4,6 +4,9 @@
 - **File:** none; read on the publisher's page, so claims cite sections, not pages.
 - **Licence:** open to read on the publisher's site; licence not stated: local only.
 - **Evidence:** analytical (framework applied to practice, with examples).
+- **Read:** not recorded when the note was written (1.0.0): read on the publisher's page, claims cite sections; the
+  note on Kurtz & Snowden 2003 calls it read in full. Recorded for 1.2.0 from what this note already said; the
+  source was not read again.
 
 ## What it says
 - Simple: cause and effect mostly linear and agreed; sense, categorise, respond.

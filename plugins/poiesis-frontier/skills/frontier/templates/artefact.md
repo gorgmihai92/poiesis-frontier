@@ -1,8 +1,8 @@
 ### <The artefact in one line> (fiction)
 
 - **Id:** <CN-001>
-- **From:** <SC-001, or "assumed, not from foresight">
-- **Scenario:** <the future it belongs to, its drivers, and what holds in it>
+- **From:** <SC-001, or none: an assumed future is said so under Scenario>
+- **Scenario:** <the future it belongs to, its drivers, and what holds in it; "assumed, not from foresight" when it is>
 - **Everyday object:** <what ordinary thing would exist there>
 - **Purpose:** <thinking about the future / criticising current practice> · <the one question it should raise>
 - **Perceptual bridge:** <what makes it plausible (technology, look, behaviour, use) and what makes it strange>

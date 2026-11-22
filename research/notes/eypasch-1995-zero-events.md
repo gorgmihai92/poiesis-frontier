@@ -16,7 +16,7 @@
   zero.
 
 ## What it means for the plugin
-- `power.py zero` reports, for "none of n people showed it", how large the true rate could still be. It
+- `power.py rate --k 0` reports, for "none of n people showed it", how large the true rate could still be. It
   computes the exact bound, 1 − 0.05^(1/n), and prints 3/n next to it as the rule of thumb.
 - The abstract gives the rule for n above 30. The exact bound is used for the small groups this plugin plans
   for; that calculation is the script's, not the article's.

@@ -73,9 +73,9 @@ not trusted"):
 - **STOPPED:** no experiment. Keep the concept in the note under its Stopped line. If the reason the conclusion
   was dropped shows an assumption worth testing, write a new concept from another start.
 
-Copy the gate's lines into the report as they are. The script needs only Python 3; it works when poiesis-insight
-is not installed, and then every conclusion counts as not challenged on record. Without saved files there is
-nothing to check: say in the chat which starting points are untested.
+Copy the gate's lines into the report as they are. The script needs only Python 3 and works whether or not
+poiesis-insight is installed: it reads the stamp file. With no stamp file every conclusion counts as not challenged
+on record. Without saved files there is nothing to check: say in the chat which starting points are untested.
 
 ## Log
 Add each ready experiment to `frontier/experiments.md` (`templates/experiments.md`) with status `planned` and the

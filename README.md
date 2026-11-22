@@ -133,7 +133,8 @@ read:
   stage, the riskiest assumption, a prediction, the smallest experiment and a kill criterion.
 - **Fixed in advance.** Assumption, measure and kill criterion are logged before the experiment starts; changing
   them is a new experiment. What was not predicted is reported as exploratory.
-- **Several variants, shown together.** A design shown alone collects higher ratings and fewer criticisms.
+- **Several variants, shown together.** A design shown alone collects higher ratings and more praise, and in
+  the one study read nobody rejected it.
 - **Distinct ideas, not ideas generated.** The report says how many concepts are distinct; asking for more of the
   same is not a method.
 - **Fiction is marked as fiction,** in the artefact itself, before and after. People are in on it, and an

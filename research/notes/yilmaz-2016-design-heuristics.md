@@ -21,4 +21,4 @@
 - Nothing yet. The abstract does not name the heuristics, and it does not say whether using them was tested
   against not using them, so no rule and no playbook step rests on this source.
 - To read in full before any of the 77 heuristics is used in the recombination playbook. Until then the playbook
-  names this source only as "not read".
+  names this source only as "abstract only", and uses nothing from it.
