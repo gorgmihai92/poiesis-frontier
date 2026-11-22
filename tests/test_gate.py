@@ -148,7 +148,7 @@ class ThreeConclusions(Project):
 
     def test_a_concept_from_a_conclusion_nobody_challenged_is_provisional(self):
         code, out = self.gate(CONCEPTS)
-        self.assertIn("PROVISIONAL CN-003: IN-003 was not challenged on record\n  IN-003 no stamp: no challenge is recorded\n", out)
+        self.assertIn("PROVISIONAL CN-003: IN-003 could not be verified\n  IN-003 no stamp: no challenge is recorded\n", out)
         self.assertIn("3 concepts: 1 through, 1 provisional, 1 stopped.", out)
         self.assertIn("Stamps: insights/challenge-stamps.jsonl, 2 ids.", out)
 
@@ -306,7 +306,7 @@ class WhatTheGateRefuses(Project):
 
     def test_a_source_or_a_question_in_from_is_not_a_challenged_conclusion(self):
         code, out = self.gate(concept("CN-001", "IN-001, walters-2023, QN-002"))
-        self.assertIn("PROVISIONAL CN-001: walters-2023 and QN-002 were not challenged on record", out)
+        self.assertIn("PROVISIONAL CN-001: walters-2023 and QN-002 could not be verified", out)
         self.assertIn("  IN-001 kept 2026-11-17\n", out)
         self.assertIn("  walters-2023 no stamp, and no conclusion with this id in insights/ or foresight/\n", out)
 
