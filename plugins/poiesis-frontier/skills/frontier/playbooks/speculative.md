@@ -27,9 +27,9 @@ what in one only. Its id (`SC-001`) goes in the concept's From line, so the gate
 one, build the future from the user's question, label it "assumed, not from foresight", and go on: name its 2–3
 drivers and the assumption under each, and build at least two contrasting futures (or say why one is enough), so
 none reads as a prediction (Phadnis et al. 2015). Then say in one line what would make it more accurate:
-[poiesis-insight](https://github.com/gorgmihai92/poiesis-insight)'s foresight (`foresight-analyst`) for scenarios
-built from evidence and signals, [poiesis-research](https://github.com/gorgmihai92/poiesis-research)
-(`evidence-scout`) for the facts behind the drivers, or both.
+[poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight) (`foresight-analyst`) for scenarios built from evidence and signals,
+[poiesis-research](https://github.com/gorgmihai92/poiesis-research) (`evidence-scout`) for the facts behind the
+drivers, or both.
 
 ## 2. The artefact brief
 Fill `templates/artefact.md` before making anything:
