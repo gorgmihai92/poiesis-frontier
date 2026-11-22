@@ -381,7 +381,7 @@ class WhatTheGateRefuses(Project):
             encoding="utf-8")
         code, out = self.gate(concept("CN-001", "QN-001"))
         self.assertIn("PROVISIONAL CN-001: QN-001 could not be verified", out)
-        self.assertIn("  QN-001 no stamp: it is not a conclusion and was not challenged; it rests on IN-001 kept 2026-11-17\n", out)
+        self.assertIn("  QN-001 no stamp and no Challenge line, so it was not challenged; it rests on IN-001 kept 2026-11-17\n", out)
 
     def test_a_question_built_on_a_dropped_conclusion_stops_the_concept(self):
         (self.root / "insights" / "2026-11-22-questions.md").write_text(
@@ -397,7 +397,7 @@ class WhatTheGateRefuses(Project):
             encoding="utf-8")
         code, out = self.gate(concept("CN-001", "QN-003"))
         self.assertIn("PROVISIONAL CN-001", out)
-        self.assertIn("QN-003 no stamp: it is not a conclusion and was not challenged; it rests on QN-004 no stamp: no challenge is recorded", out)
+        self.assertIn("QN-003 no stamp and no Challenge line, so it was not challenged; it rests on QN-004 no stamp: no challenge is recorded", out)
 
     def test_one_dropped_start_among_several_stops_the_concept(self):
         code, out = self.gate(concept("CN-001", "IN-001, IN-002, IN-003"))
@@ -411,9 +411,59 @@ class WhatTheGateRefuses(Project):
         self.gate(None, "--write")
         self.assertIn("- **Provisional:** yes · no starting point is named · checked 2026-11-22", self.note.read_text(encoding="utf-8"))
 
+    def test_a_dropped_start_is_found_however_the_from_line_joins_its_ids(self):
+        for start in ("IN-001 and IN-002", "IN-001; IN-002", "IN-001 / IN-002", "[IN-002](../insights/x.md)",
+                      "**IN-002**", "IN-001,\n  IN-002"):
+            code, out = self.gate(concept("CN-001", start))
+            self.assertIn("STOPPED CN-001: IN-002 was dropped", out, start)
+
+    def test_a_dropped_conclusion_under_two_headings_still_stops(self):
+        copy = self.insight.read_text(encoding="utf-8")
+        (self.root / "insights" / "archive-copy.md").write_text(copy, encoding="utf-8")
+        code, out = self.gate(concept("CN-002", "IN-002") + concept("CN-001", "IN-001"))
+        self.assertIn("STOPPED CN-002: IN-002 was dropped", out)
+        self.assertIn("IN-002 dropped 2026-11-17 (it is under two headings", out)
+        self.assertIn("PROVISIONAL CN-001", out)
+        self.assertIn("IN-001 is under two headings", out)
+
+    def test_write_works_on_lines_without_list_dashes(self):
+        text = "### If A, then B.\n\n**Id:** CN-003\n**From:** IN-003\n"
+        code, out = self.gate(text, "--write")
+        self.assertIn("Saved:", out)
+        self.assertEqual(self.note.read_text(encoding="utf-8"),
+                         "### If A, then B.\n\n**Id:** CN-003\n**From:** IN-003\n"
+                         "- **Provisional:** yes · IN-003 no stamp: no challenge is recorded · checked 2026-11-22\n")
+
+    def test_write_puts_the_mark_after_a_from_line_that_wraps(self):
+        text = "### If A, then B.\n\n- **Id:** CN-001\n- **From:** IN-001,\n  IN-003\n- **Method:** x\n"
+        self.gate(text, "--write")
+        lines = self.note.read_text(encoding="utf-8").split("\n")
+        self.assertEqual(lines[4], "  IN-003")
+        self.assertTrue(lines[5].startswith("- **Provisional:** yes · IN-001 kept 2026-11-17; IN-003 no stamp"), lines[5])
+        self.assertEqual(lines[6], "- **Method:** x")
+
+    def test_a_note_that_is_not_utf8_is_not_written_back(self):
+        data = concept("CN-003", "IN-003").encode("utf-8") + "caf\xe9\n".encode("latin-1")
+        self.note.write_bytes(data)
+        code, out, err = helpers.run(ex, ["gate", str(self.note), "--write", "--today", TODAY])
+        self.assertEqual(code, 2)
+        self.assertIn("is not UTF-8", out)
+        self.assertEqual(self.note.read_bytes(), data)
+
+    def test_a_byte_order_mark_is_kept_when_the_note_is_written(self):
+        self.note.write_bytes(b"\xef\xbb\xbf" + concept("CN-003", "IN-003").encode("utf-8"))
+        self.gate(None, "--write")
+        self.assertTrue(self.note.read_bytes().startswith(b"\xef\xbb\xbf### If CN-003 holds"))
+
+    def test_a_stamp_file_that_starts_with_a_byte_order_mark_is_read(self):
+        self.stamps.write_bytes(b"\xef\xbb\xbf" + self.stamps.read_bytes())
+        self.assertIn("THROUGH CN-001", self.gate(concept("CN-001", "IN-001"))[1])
+
     def test_from_entries_may_be_wrapped_or_annotated(self):
         self.assertEqual(ex.from_ids("`IN-001`, [[IN-002]], IN-003 (weakened), IN-001, none, key-2021."),
                          ["IN-001", "IN-002", "IN-003", "key-2021"])
+        self.assertEqual(ex.from_ids("IN-001 and SC-002; walters-2023, [[nosek-2018]]"),
+                         ["IN-001", "SC-002", "walters-2023", "nosek-2018"])
 
     def test_a_concept_in_the_1_1_format_is_named_as_not_checked(self):
         old = "### If forms go, then onboarding is faster.\n\n- **Starting point:** insights/x.md · kept\n- **Verdict:** ready\n"

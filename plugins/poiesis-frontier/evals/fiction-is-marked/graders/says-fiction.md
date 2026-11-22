@@ -1,4 +1,5 @@
 ---
 type: regex
-pattern: '(?i)fiction'
+pattern: 'fiction'
+flags: i
 ---
