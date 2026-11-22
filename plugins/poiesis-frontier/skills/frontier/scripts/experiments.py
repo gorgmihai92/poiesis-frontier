@@ -263,8 +263,13 @@ def from_ids(value: str) -> list[str]:
     return out
 
 
-def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps_name: str, root: Path) -> tuple[str, str]:
-    """One starting point: ("ok" | "stop" | "open", what to say about it)."""
+def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps_name: str, root: Path,
+                follow: bool = True) -> tuple[str, str]:
+    """One starting point: ("ok" | "stop" | "via" | "open", what to say about it).
+
+    "via" is a stop one step away: the start is not a conclusion (a research question, say) and what it rests
+    on, in its own From line, was dropped. Following From can only stop a concept; it never lets one through.
+    """
     places = found.get(id_, [])
     block = places[0][1] if len(places) == 1 else None
     shown = shown_verdict(block) if block else None
@@ -283,6 +288,15 @@ def check_start(id_: str, stamps: dict, damaged: str | None, found: dict, stamps
         if block is None:
             where = " or ".join(f"{f}/" for f in NOTE_FOLDERS)
             return "open", f"{id_} no stamp, and no conclusion with this id in {where}"
+        rests = first(block, FROM)
+        if shown is None and rests and follow:
+            inner = [check_start(i, stamps, damaged, found, stamps_name, root, follow=False)
+                     for i in from_ids(rests[1]) if i != id_]
+            if inner:
+                texts = "; ".join(text for _, text in inner)
+                if any(kind in ("stop", "via") for kind, _ in inner):
+                    return "via", f"{id_} rests on a dropped conclusion ({texts})"
+                return "open", f"{id_} no stamp: it is not a conclusion and was not challenged; it rests on {texts}"
         return stop_on_label("no stamp") or (
             "open", f"{id_} no stamp: no challenge is recorded" + (f" ({said})" if said else ""))
     line, obj = stamps[id_]
@@ -320,11 +334,13 @@ def gate_concept(block: dict, stamps: dict, damaged: str | None, found: dict, st
                 "record": "no starting point is named"}
     checks = [check_start(i, stamps, damaged, found, stamps_name, root) for i in ids]
     stops = [i for i, (kind, _) in zip(ids, checks) if kind == "stop"]
+    via = [i for i, (kind, _) in zip(ids, checks) if kind == "via"]
     opens = [i for i, (kind, _) in zip(ids, checks) if kind == "open"]
     record = "; ".join(text for _, text in checks)
-    if stops:
-        return {"state": "stopped", "why": _list(stops) + (" was" if len(stops) == 1 else " were") + " dropped",
-                "starts": [t for _, t in checks], "record": record}
+    if stops or via:
+        why = [_list(stops) + (" was" if len(stops) == 1 else " were") + " dropped"] if stops else []
+        why += [_list(via) + (" rests" if len(via) == 1 else " rest") + " on a dropped conclusion"] if via else []
+        return {"state": "stopped", "why": "; ".join(why), "starts": [t for _, t in checks], "record": record}
     if opens:
         return {"state": "provisional", "why": _list(opens) + " could not be verified",
                 "starts": [t for _, t in checks], "record": record}
