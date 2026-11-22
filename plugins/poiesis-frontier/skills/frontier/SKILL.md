@@ -6,7 +6,7 @@ description: New concepts and the experiments that could prove them wrong, start
 # Frontier
 
 Insight finds and tests patterns; frontier does not look for patterns itself. It starts from the conclusions insight
-kept, the scenarios foresight built, or the gaps research found, and turns them into concepts and experiments. The
+kept, the scenarios poiesis-foresight built, or the gaps research found, and turns them into concepts and experiments. The
 experiments produce new data, which insight then reads.
 
 | The user wants… | Playbook | Saved in |
@@ -29,7 +29,8 @@ experiments produce new data, which insight then reads.
 1. **Start from what was tested** (see "Input" below). Say what the starting points are and how each was tested.
    If there are none, the user's question is the start, and its premise becomes the first assumption to test.
    Answer on your own; where [poiesis-research](https://github.com/gorgmihai92/poiesis-research) (a premise nobody checked) or
-   [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) (data or scenarios to start from) would make the concepts more accurate,
+   [poiesis-insight](https://github.com/gorgmihai92/poiesis-insight) (data to start from) or
+   [poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight) (scenarios to start from) would make the concepts more accurate,
    say which and why in one line, with the link.
 2. **Frame** with `playbooks/frame.md`: what kind of problem it is decides whether frontier fits and how big the
    experiments are.
@@ -52,9 +53,10 @@ What frontier reads, if the project has it (it works without them too):
   narrower claim). Dropped ones are not starting points; their reasons may still show an assumption worth testing.
   The label in the note is not the record: `insights/challenge-stamps.jsonl` is, and the gate reads it.
 - `insights/` research questions (`QN-…`): a question is not challenged; the gate follows its From line one step.
-- `foresight/<date>-<topic>.md`: the scenarios, the robust and contingent findings, the signals. Speculative design
-  starts here.
-- `foresight/forecasts.md`: an open forecast can be the question an experiment answers.
+- `foresight/<date>-<topic>.md` (poiesis-foresight): the scenarios (`SC-001`), what holds in every scenario and
+  what in one only, the signals. Speculative design starts here. A scenario's challenge is checked like a
+  conclusion's: by its stamp, when it has one.
+- `foresight/forecasts.md` (poiesis-foresight): an open forecast can be the question an experiment answers.
 - `research/README.md` and `research/notes/` (poiesis-research): the gaps ("not studied", disagreements). Cite back
   to the note and page.
 - `frontier/experiments.md`: what was already tried, killed or kept; do not propose a killed concept again without
@@ -98,10 +100,13 @@ on without it if the user says no (say what was left out). Check with `claude pl
 the user agrees, with `claude plugin marketplace add gorgmihai92/<repo>` and then
 `claude plugin install <plugin>@<repo>` (it works after Claude Code restarts).
 Every suggestion, from the skill or an agent, gives the plugin's link (below) and names the skill or agent
-to use, e.g. "[poiesis-insight](https://github.com/gorgmihai92/poiesis-insight), `foresight-analyst`".
+to use, e.g. "[poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight), `foresight-analyst`".
 - **[poiesis-research](https://github.com/gorgmihai92/poiesis-research)**: when a concept rests on a factual premise nobody has checked.
 - **[poiesis-insight](https://github.com/gorgmihai92/poiesis-insight)**: when the question rests on data with no tested starting points yet,
-  and to interpret experiment results.
+  to challenge a conclusion a concept starts from (its `challenger` writes the stamp the gate reads), and to
+  interpret experiment results.
+- **[poiesis-foresight](https://github.com/gorgmihai92/poiesis-foresight)**: when speculative design needs scenarios built from evidence and signals
+  (`foresight-analyst`), not an assumed future.
 - **poiesis-ui** ([poiesis-design](https://github.com/gorgmihai92/poiesis-design)): to build a concept that survived its experiment: how it looks.
 - **poiesis-ux** ([poiesis-design](https://github.com/gorgmihai92/poiesis-design)): the same: how it behaves; its tester walks the prototype.
 
