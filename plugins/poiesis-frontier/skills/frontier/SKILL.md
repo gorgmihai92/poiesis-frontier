@@ -65,8 +65,8 @@ Frontier never edits these files; it writes only to `frontier/`.
 
 ## Output (when saved: SKILL.md, "Saving")
 
-- `frontier/<YYYY-MM-DD>-<topic>.md`: starting points, frame, the concepts (`templates/concept.md`), each with its
-  experiment.
+- `frontier/<YYYY-MM-DD>-<topic>.md`: its top from `templates/report.md` (properties and title), then starting
+  points, frame, the concepts (`templates/concept.md`), each with its experiment.
 - `frontier/experiments.md`: the experiment log (`templates/experiments.md`), one row per experiment.
 - `frontier/results/<id>.md`: what an experiment produced (`templates/result.md`), with the raw data next to it.
   These are data for insight: to interpret them, the user asks poiesis-insight, which reads them as "your own data".
@@ -129,3 +129,11 @@ means "unknown", said in the report, never an error.
   **From**), `insights/challenge-stamps.jsonl` (the challenge stamps, format 1, verified with this plugin's own
   code), `foresight/` (scenarios with **Id** `SC-001`) and `research/notes/` (poiesis-research: gaps, "Later
   work"). Never writes outside `frontier/`.
+
+Added in 1.3.0. Everything above is unchanged.
+- A report, the log, a result and a study design start with a block of Obsidian properties, as their templates
+  show (`type`, `plugin`, `date`, `topic`; a result adds `id`, `status` and `from`, a study design `id` and
+  `from`). Copy the values from the file itself; the block is a copy for Obsidian's views, and the label lines,
+  the gate's line and the log rows stay the record. In the block no line starts with `#`, text values are quoted,
+  and a link is one quoted list item. Never put a link in a heading (the stamp and the gate hash it) or an **Id**
+  line, or a link with an alias (`[[a|b]]`) in the log or any table.

@@ -87,9 +87,9 @@ class Version(unittest.TestCase):
     def test_the_version_is_1_2_0_in_three_places(self):
         plugin = json.loads((helpers.PLUGIN / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
         market = json.loads((helpers.ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"], "1.2.0")
-        self.assertEqual(market["plugins"][0]["version"], "1.2.0")
-        self.assertTrue((helpers.ROOT / "CHANGELOG.md").read_text(encoding="utf-8").startswith("# Changelog\n\n## 1.2.0\n"))
+        self.assertEqual(plugin["version"], "1.3.0")
+        self.assertEqual(market["plugins"][0]["version"], "1.3.0")
+        self.assertTrue((helpers.ROOT / "CHANGELOG.md").read_text(encoding="utf-8").startswith("# Changelog\n\n## 1.3.0\n"))
 
 
 if __name__ == "__main__":

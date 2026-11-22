@@ -188,6 +188,7 @@ plugins/
         experiments.py        check the experiment log; gate the starting points; give ids
         power.py              what a sample of a given size can detect
       templates/
+        report.md             the top of every report: its properties and its title
         concept.md            one concept with everything it carries
         experiments.md        the experiment log
         result.md             one experiment's result, for insight
