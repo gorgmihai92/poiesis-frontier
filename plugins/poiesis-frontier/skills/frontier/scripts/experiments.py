@@ -19,7 +19,8 @@ the notes of insights/ and foresight/. One line per concept:
   STOPPED      a starting point was dropped
 --write puts the result in the note, as a `Provisional` or a `Stopped` line under the concept. Nothing is ever
 written to the experiment log. Exit code 1 when a concept is stopped or a provisional one does not say so in the
-note; with --strict also when any concept is provisional or was not checked. `gate -h` has the options.
+note; with --strict also when any concept is provisional or was not checked; 2 when --write is refused because
+the note is not UTF-8 (the results are printed first). `gate -h` has the options.
 
 Ids. `ids CN` prints the next free concept id in the folders given (ST for a study design, E for an experiment);
 `ids --list` prints the ids in use and exits 1 when one is under two headings.
@@ -55,7 +56,7 @@ ID_LINE = re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:\*\*)?|\*\*)id(?:\*\*)?[ \t]*:(?:
 CHALLENGE = re.compile(r"^[ \t]*(?:[-*+][ \t]+(?:[*_]{1,2})?|[*_]{1,2})challenge[a-z ]*?(?:[*_]{1,2})?[ \t]*"
                        r"(?::(?:[*_]{1,2})?|(?:[*_]{1,2})?:|[*_]{2}[ \t])[ \t]*(.*)$", re.IGNORECASE)
 VERDICT_WORD = re.compile(r"\b(kept|weakened|dropped)\b", re.IGNORECASE)
-OBJECT_ID = re.compile(r"(?<![A-Za-z0-9])[A-Z]{1,3}-[0-9]+(?![A-Za-z0-9])")
+OBJECT_ID = re.compile(r"(?<![A-Za-z0-9-])[A-Z]{1,3}-[0-9]+(?![A-Za-z0-9-])")
 ITEM = re.compile(r"^[ \t]*[-*+][ \t]+")
 NEGATION = re.compile(r"\b(?:not|no|never|un\w*)\b", re.IGNORECASE)
 CHECKED = re.compile(r"[ \t]*·[ \t]*checked \d{4}-\d{2}-\d{2}[ \t]*$")
@@ -297,7 +298,7 @@ def from_ids(value: str) -> list[str]:
     taken up to its first space. `none` and a dash name nothing.
     """
     out: list[str] = []
-    for part in re.split(r"[,;]", value):
+    for part in re.split(r"[,;/]|\s+(?:and|&)\s+|^\s*[-*+]\s+|\s[-*+]\s+", value):
         ids = OBJECT_ID.findall(part)
         if ids:
             out += [i for i in dict.fromkeys(ids) if i not in out]
@@ -312,20 +313,23 @@ def from_ids(value: str) -> list[str]:
 
 
 def from_value(block: dict) -> tuple[int, str, int] | None:
-    """The From line with the lines it runs on to: (its line, the whole value, the value's last line). A value
-    ends at an empty line, at the next list item, or at a line that starts with a bold label, as the reference
-    reads a field that wraps."""
+    """The From line with the lines it runs on to: (its line, the whole value, the value's last line).
+
+    A value runs on over the lines indented more than the From line, including a nested list of ids; it ends at an
+    empty line, at a line indented no more than the From line, or at a line that starts with a bold label."""
     found = first(block, FROM)
     if not found:
         return None
     index, value = found
     parts, last = [value], index
+    own = len(block["lines"][index]) - len(block["lines"][index].lstrip(" \t"))
     for i in block["fields"]:
         if i <= index:
             continue
         line = block["lines"][i]
         line = line[:-1] if line.endswith("\r") else line
-        if i != last + 1 or not line.strip() or ITEM.match(line) or line.lstrip().startswith("**") \
+        indent = len(line) - len(line.lstrip(" \t"))
+        if i != last + 1 or not line.strip() or indent <= own or line.lstrip().startswith("**") \
                 or HEADING.match(line):
             break
         parts.append(line.strip())
