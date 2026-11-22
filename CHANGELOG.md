@@ -9,6 +9,8 @@ file as before.
   and `from`. A report holds several concepts and the log several rows, so their properties carry no id: the Id,
   From, Stage, Verdict and Log id lines, the gate's Provisional or Stopped line and the log rows stay the record.
   The concept and artefact templates go inside a report and get no block.
+- **The block is a copy.** `SKILL.md` asks for it to change in the same edit as what it copies, and for no
+  experiment id to be linked.
 - **Tests.** `test_templates.py`: the block in each template and its rules; the log check, the gate (with and
   without `--write`) and `ids` giving the same results with the block on a report, on the log and on the insight
   report the gate reads.
