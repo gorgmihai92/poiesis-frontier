@@ -2,6 +2,8 @@
 
 Nothing here uses the network or writes outside a temporary folder.
 """
+from __future__ import annotations
+
 import contextlib
 import io
 import sys
