@@ -1,6 +1,6 @@
 ---
 name: frontier
-description: New concepts and the experiments that could prove them wrong, starting from what insight has already tested. Methods - first principles, lateral thinking (provocations, reversals, analogies), systems thinking (loops, leverage points), complexity (what kind of problem it is), philosophy of concepts (what a thing is for), speculative design (artefacts from foresight scenarios). Frontier never states conclusions - every concept carries the assumption it tests, the smallest experiment that could prove it wrong, and what would kill it. Use when the user asks for new concepts, reframings, provocations, speculative artefacts, unconventional or "frontier" ideas, or experiments to test an idea.
+description: New concepts and the experiments that could prove them wrong, starting from what insight has already tested and checked by a script against the challenge stamps. Methods - first principles, lateral thinking (provocations, reversals, analogies), systems thinking (loops, leverage points), complexity (what kind of problem it is), philosophy of concepts (what a thing is for), design spaces, estrangement, recombination, speculative design (artefacts from foresight scenarios), speculative research (contested assumptions, imaginary abstracts, a protocol before the data), and study design for a small group with what its sample can detect. Frontier never states conclusions - every concept carries the assumption it tests, the smallest experiment that could prove it wrong, and what would kill it. Use when the user asks for new concepts, reframings, provocations, speculative artefacts, unconventional or "frontier" ideas, a design space, a study design, or experiments to test an idea.
 ---
 
 # Frontier
@@ -16,8 +16,13 @@ experiments produce new data, which insight then reads.
 | provocations, reversals, analogies from far-off fields | `playbooks/lateral.md` | `frontier/` |
 | the loops of a system and where to push | `playbooks/systems.md` | `frontier/` |
 | what a thing is for ("what is a button for?") | `playbooks/concepts.md` | `frontier/` |
-| artefacts from possible futures | `playbooks/speculative.md` | `frontier/` |
-| (always last) the assumption, the smallest experiment, the kill criterion | `playbooks/experiment.md`, agent `experimentalist` | `frontier/experiments.md` |
+| every way an interaction could work, and the cells nobody has tried | `playbooks/design-space.md` | `frontier/` |
+| a familiar thing made strange: a stranger's description, relabelling, an extreme character, a removed function | `playbooks/estrangement.md` | `frontier/` |
+| an ordinary base with one unusual pairing | `playbooks/recombination.md` | `frontier/` |
+| artefacts from possible futures: brief, contrasting versions, staging, marked as fiction | `playbooks/speculative.md` | `frontier/` |
+| whether a study is worth running: contested assumptions, an imaginary abstract, a protocol before the data | `playbooks/speculative-research.md` | `frontier/studies/` |
+| a study for the user and a small group, and what its sample can detect | `playbooks/study.md`, `scripts/power.py` | `frontier/studies/` |
+| (always last) the stage, the assumption, the smallest experiment, the kill criterion, the gate | `playbooks/experiment.md`, agent `experimentalist` | `frontier/experiments.md` |
 
 ## Every request
 
@@ -29,18 +34,24 @@ experiments produce new data, which insight then reads.
 2. **Frame** with `playbooks/frame.md`: what kind of problem it is decides whether frontier fits and how big the
    experiments are.
 3. **Generate** with one or more method playbooks. A request may combine them (e.g. first principles, then a
-   reversal of the assumption that is left).
+   reversal of the assumption that is left). Report how many concepts were generated and how many are distinct
+   (`rules.md`, "Generating").
 4. **Every concept goes through `playbooks/experiment.md`** before it is reported: the assumption it tests, the
    smallest experiment that could prove it wrong, and what would kill it, written before anything runs. At
    thorough depth (rules.md, "Depth"), or for many concepts at once, use the `experimentalist` agent; give it the
    concepts and the starting points, not the reasoning that produced them.
-5. **Follow `rules.md`**, the same for every playbook.
+5. **Check the starting points** of saved concepts with the gate (`playbooks/experiment.md`, "The gate"). A
+   concept from a dropped conclusion is stopped; one from a conclusion with no valid stamp is provisional, and
+   says so. Copy the gate's lines; never retype a verdict.
+6. **Follow `rules.md`**, the same for every playbook.
 
 ## Input
 
 What frontier reads, if the project has it (it works without them too):
 - `insights/<date>-<topic>.md` (poiesis-insight): start from insights marked **kept** or **weakened** (use the
   narrower claim). Dropped ones are not starting points; their reasons may still show an assumption worth testing.
+  The label in the note is not the record: `insights/challenge-stamps.jsonl` is, and the gate reads it.
+- `insights/` research questions (`QN-…`): a question is not challenged; the gate follows its From line one step.
 - `foresight/<date>-<topic>.md`: the scenarios, the robust and contingent findings, the signals. Speculative design
   starts here.
 - `foresight/forecasts.md`: an open forecast can be the question an experiment answers.
@@ -57,12 +68,17 @@ Frontier never edits these files; it writes only to `frontier/`.
 - `frontier/experiments.md`: the experiment log (`templates/experiments.md`), one row per experiment.
 - `frontier/results/<id>.md`: what an experiment produced (`templates/result.md`), with the raw data next to it.
   These are data for insight: to interpret them, the user asks poiesis-insight, which reads them as "your own data".
+- `frontier/studies/<id>-<slug>.md`: a study design (`templates/study.md`), written and dated before any data.
 - Concepts that survive their experiments go to building (poiesis-ui, poiesis-ux, or the project's own work).
 
 Check the log with `python3 -I $S/experiments.py frontier/experiments.md`: open, overdue, kept, killed,
 inconclusive, and rows missing a kill criterion or with a kill criterion written after the start.
+Check what concepts start from with `python3 -I $S/experiments.py gate frontier/<date>-<topic>.md --write`, and
+give ids with `python3 -I $S/experiments.py ids CN frontier` (`ST` for a study design, `E` for an experiment).
+Say what a sample can detect with `python3 -I $S/power.py` (`detect`, `power`, `n`, `count`, `two`, `see`, `rate`).
 Scripts are in `${CLAUDE_SKILL_DIR}/scripts` (called `$S`; if that path does not exist, Glob for
-`**/frontier/scripts/experiments.py` under `~/.claude`). They need only Python 3; run them with `python3 -I`.
+`**/frontier/scripts/experiments.py` under `~/.claude`). They need only Python 3 (3.9 or later); run them with
+`python3 -I`.
 
 ## Saving
 Save the work (paths in the playbooks) when any of these holds: the depth is standard or thorough; the user asks;
@@ -97,5 +113,13 @@ means "unknown", said in the report, never an error.
   **Verdict** and **Log id**; `frontier/experiments.md` (columns `id | concept | assumption | prediction | kill
   criterion | criterion written | started | due | status | result`); `frontier/results/<id>.md` ("What happened",
   "Against the kill criterion", "Not predicted (exploratory)", **Raw data**), read by poiesis-insight.
-- Reads `insights/` (poiesis-insight: the **Challenge** line), `foresight/` (scenarios) and `research/notes/`
-  (poiesis-research: gaps, "Later work").
+- Added in 1.2.0, all additive: each concept also has **Id** (`CN-001`), **From** (the ids it starts from,
+  comma-separated), **Stage**, and one line the gate writes, **Provisional** (`yes` or `no` · why · checked
+  date) or **Stopped** (why · checked date); `frontier/studies/<id>-<slug>.md`, a study design with **Id**
+  (`ST-001`) and **From**; the concept cell of the log starts with the concept's id. The log keeps its ten
+  columns and five statuses: "provisional" is never a status. A new log column would go after `result`, and no
+  cell holds a `|`.
+- Reads `insights/` (poiesis-insight: the **Id**, the **Challenge** line, and research questions with their
+  **From**), `insights/challenge-stamps.jsonl` (the challenge stamps, format 1, verified with this plugin's own
+  code), `foresight/` (scenarios with **Id** `SC-001`) and `research/notes/` (poiesis-research: gaps, "Later
+  work"). Never writes outside `frontier/`.
