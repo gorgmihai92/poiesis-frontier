@@ -1,6 +1,6 @@
 # Poiesis Frontier
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24501568.svg)](https://doi.org/10.5281/zenodo.24501568)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24501568.svg)](https://doi.org/10.5281/zenodo.24501568) [![Cognitive Centered Design Oath: signed](https://raw.githubusercontent.com/gorgmihai92/ccd-oath/main/badges/ccd-oath-signed.svg)](https://github.com/gorgmihai92/ccd-oath/blob/main/SIGNATORIES.md)
 
 New concepts, each with the experiment that could kill it, in Claude Code. Poiesis Frontier thinks past what is
 known. It starts from the conclusions Poiesis Insight has already tested, the scenarios Poiesis Foresight built, or
