@@ -13,7 +13,7 @@ This folder is not part of the plugin, so it is not installed with it.
 |---|---|
 | `test_power.py` | `power.py` against the worked examples of the G*Power 3.1 manual and of Lakens 2022, the lab plan's "five checks leave up to 45%", and second calculations made another way (closed forms, a simulation, exact fractions) |
 | `test_gate.py` | the stamp format's three test vectors; the gate on the three stamped conclusions of poiesis-insight (kept goes through, dropped is stopped, never challenged is provisional); what the gate refuses; the reading rules of the stamp format; `ids` |
-| `test_experiments.py` | the experiment log check prints what 1.1.4 printed for the lab's test log, line for line |
+| `test_experiments.py` | the experiment log check prints what 1.1.4 printed for the lab's test log, line for line; a row's assumption, prediction and kill criterion against the concept's lines (1.3.1) |
 | `test_files.py` | the eval cases' format, "Read first" in the playbooks, a **Read** line in every new note, the version in three places |
 
 ## Fixtures

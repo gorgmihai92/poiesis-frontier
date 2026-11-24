@@ -80,7 +80,9 @@ on record. Without saved files there is nothing to check: say in the chat which 
 ## Log
 Add each ready experiment to `frontier/experiments.md` (`templates/experiments.md`) with status `planned` and the
 date the kill criterion was written. Start the concept cell with the concept's id (`CN-001 · …`); no cell holds a
-`|`. When it runs, set `running` and the start date. When it ends, write `frontier/results/<id>.md`
+`|`. The assumption, prediction and kill criterion cells are the concept's **Assumption**, **Prediction** and
+**Kill criterion** lines copied word for word, the kill criterion without its ` · written <date>`, which goes in
+`criterion written`; so those three lines of the concept hold no `|` either (write `/`). When it runs, set `running` and the start date. When it ends, write `frontier/results/<id>.md`
 (`templates/result.md`) with the raw data next to it, and set the status:
 - **kept:** the kill criterion was not met; the concept survives this test, nothing more.
 - **killed:** the kill criterion was met.

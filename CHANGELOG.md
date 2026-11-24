@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.1
+A fix. The log keeps its ten columns and five statuses; no path, field or column is renamed or removed.
+- **The row copies the concept.** The same assumption, prediction and kill criterion were written twice, in the
+  concept and in its log row, and nothing checked that the two agreed; in the first real use they were already two
+  wordings. `playbooks/experiment.md` now says the three cells are the concept's lines copied word for word (the
+  kill criterion without its ` · written <date>`, which goes in `criterion written`), and that those three lines
+  of the concept hold no `|`.
+- **`experiments.py <log>` checks it.** For each row whose concept cell starts with a concept id, the concept is
+  looked up in the report the cell names, else by its Id line in the notes next to the log; each of the three
+  cells that differs from the concept's line, after the whitespace normalisation of a stamped sentence, is a
+  `DIFFERS` problem (exit 1) showing both wordings. A concept line wrapped onto the next lines is read whole, as
+  poiesis-insight reads a field. A concept not found, under two headings, or a concept cell that names the id but
+  does not start with it, is a note on stderr and changes no exit code. Rows with no concept id are not compared,
+  so the 1.1.4 output of the lab's test log is unchanged.
+- **Rows written before 1.3.1.** A row that put the concept's lines in other words now gives `DIFFERS`, finished
+  or not, until it is fixed. When the concept was not changed after the start, copy its three lines into the row.
+  When the concept was edited after the experiment started, the row is the record of what was fixed in advance:
+  that is the drift the check is for, so the concept goes back to the row's wording or the change becomes a new
+  row, as the log's header says.
+- **Tests.** `test_experiments.py`: a matching row, each cell differing, the ` · written` part, whitespace, a
+  wrapped line, the report named in the cell or found by id, a concept not found or under two headings, an id
+  after a link.
+- **Not checked in this version:** any run on a topic.
+
 ## 1.3.0
 Everything is added: no path, field or column of 1.2.0 was renamed or removed, and `experiments.py` reads every
 file as before.
