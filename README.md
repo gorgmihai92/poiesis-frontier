@@ -1,5 +1,7 @@
 # Poiesis Frontier
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24501568.svg)](https://doi.org/10.5281/zenodo.24501568)
+
 New concepts, each with the experiment that could kill it, in Claude Code. Poiesis Frontier thinks past what is
 known. It starts from the conclusions Poiesis Insight has already tested, the scenarios Poiesis Foresight built, or
 the gaps research found, checks by script that what it starts from really survived its challenge, and turns them
