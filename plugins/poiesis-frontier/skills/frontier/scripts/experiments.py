@@ -9,7 +9,10 @@
 The log. Columns: id | concept | assumption | prediction | kill criterion | criterion written | started | due |
 status | result. Status is planned, running, kept, killed or inconclusive. Prints the count per status, experiments
 past their due date that are not finished, and rows that break the rules: no kill criterion, no date for it, a kill
-criterion written after the experiment started, or a finished experiment with no result.
+criterion written after the experiment started, a finished experiment with no result, or an assumption, prediction
+or kill criterion that DIFFERS from the concept's own line. The concept is the one whose id starts the concept cell,
+looked up in the report the cell names, else in the notes next to the log; one that is not found is a note on
+stderr, not a failure.
 
 The gate. A concept is a heading with `- **Id:** CN-001` and `- **From:** IN-001, IN-004` under it. Each id in
 From is looked up in the challenge stamps (insights/challenge-stamps.jsonl, written by poiesis-insight) and in
@@ -73,6 +76,12 @@ def field(name: str) -> re.Pattern:
 
 FROM, PROVISIONAL, STOPPED = field("from"), field("provisional"), field("stopped")
 STARTING_POINT, LOG_ID = field("starting point"), field("log id")
+ASSUMPTION, PREDICTION, KILL = field("assumption"), field("prediction"), field("kill criterion")
+WRITTEN = re.compile(r"[ \t]*·[ \t]*written \d{4}-\d{2}-\d{2}")
+CELL_ID = re.compile(r"^[\s*_`\[]*(CN-[0-9]+)(?![\w-])")
+CN_ANYWHERE = re.compile(r"(?<![\w-])CN-[0-9]+(?![\w-])")
+CELL_PATH = re.compile(r"[^\s()\[\]<>`*]+\.md\b")
+CELL_LINK = re.compile(r"\[\[([^\]|#]+)(?:#[^\]]*)?\]\]")
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -94,11 +103,12 @@ def check_log(log: Path) -> int:
     today = dt.date.today().isoformat()
     counts = {s: 0 for s in STATUSES}
     overdue, problems, bad = [], [], []
+    notes: dict = {}  # the notes next to the log, read once when a row needs them
     for r in rows(log):
         if len(r) < 10:
             bad.append(r[0])
             continue
-        eid, concept, _assumption, _prediction, kill, written, started, due, status, result = r[:10]
+        eid, concept, assumption, prediction, kill, written, started, due, status, result = r[:10]
         status = status.lower()
         if status not in counts:
             bad.append(eid)
@@ -114,6 +124,8 @@ def check_log(log: Path) -> int:
             problems.append(f"{eid}: {status} but no result")
         if status not in FINISHED and due and due < today:
             overdue.append(f"{eid} (due {due}, {status}): {concept}")
+        problems += same_as_concept(log, eid, concept, {"assumption": assumption, "prediction": prediction,
+                                                         "kill criterion": kill}, notes)
     total = sum(counts.values())
     print(f"{total} experiments: " + ", ".join(f"{n} {s}" for s, n in counts.items()))
     done = sum(counts[s] for s in FINISHED)
@@ -132,15 +144,105 @@ def check_log(log: Path) -> int:
     return 1 if problems or bad else 0
 
 
+def same_as_concept(log: Path, eid: str, cell: str, cells: dict[str, str], notes: dict) -> list[str]:
+    """The row's assumption, prediction and kill criterion against the concept's lines: one DIFFERS per cell.
+
+    The row's cells are the concept's lines copied word for word; the kill criterion without its ` · written <date>`.
+    Both sides are normalised as a stamped sentence is (`normalise`). A row whose concept cell starts with no
+    concept id is not compared (logs from before 1.2.0). A concept that is not found, or is under two headings, is
+    a note on stderr: the row is not compared and the exit code does not change.
+    """
+    m = CELL_ID.match(cell)
+    if not m:
+        if CN_ANYWHERE.search(cell):
+            print(f"({eid}: the concept cell does not start with the concept's id; its assumption, prediction and "
+                  "kill criterion were not compared)", file=sys.stderr)
+        return []
+    cid = m.group(1)
+    root = project_root(log)
+    found, where = concept_block(log, cid, cell, root, notes)
+    if found is None:
+        print(f"({eid}: {where}; its assumption, prediction and kill criterion were not compared)",
+              file=sys.stderr)
+        return []
+    path, block = found
+    out = []
+    for (name, row), pattern in zip(cells.items(), (ASSUMPTION, PREDICTION, KILL)):
+        if pattern is KILL and (not row or row.startswith("<")):
+            continue  # already "no kill criterion"
+        own = wrapped(block, pattern)
+        if own is None:
+            print(f"({eid}: {cid} in {_rel(path, root)} has no {name.capitalize()} line, so the {name} was not "
+                  "compared)", file=sys.stderr)
+            continue
+        own = WRITTEN.sub("", own, count=1) if pattern is KILL else own
+        if normalise(row) != normalise(own):
+            out.append(f"{eid}: {name} DIFFERS from {cid} in {_rel(path, root)}\n"
+                       f"    concept: {normalise(own)}\n    row:     {normalise(row)}")
+    return out
+
+
+def wrapped(block: dict, pattern: re.Pattern) -> str | None:
+    """A field's value with the lines it is wrapped onto, read as poiesis-insight's `field` reads one: the value
+    ends at an empty line, at the next list item, at a line that starts with a bold label, or at a heading."""
+    found = first(block, pattern)
+    if found is None:
+        return None
+    index, value = found
+    parts = [value]
+    for i in block["fields"]:
+        if i <= index:
+            continue
+        line = block["lines"][i].rstrip("\r")
+        if i != index + len(parts) or not line.strip() or ITEM.match(line) or line.lstrip().startswith("**"):
+            break
+        parts.append(line)
+    return " ".join(parts)
+
+
+def concept_block(log: Path, cid: str, cell: str, root: Path, notes: dict) -> tuple[tuple[Path, dict] | None, str]:
+    """The concept with this id: in the report the cell names, if it is there; else the one heading with this Id
+    in the notes of the log's folder (as the gate finds conclusions). (None, why) when there is not exactly one."""
+    named: list[Path] = []
+    for token in CELL_PATH.findall(cell):
+        named += [root / token, log.parent / token, log.parent / Path(token).name]
+    for link in CELL_LINK.findall(cell):
+        name = link.strip() if link.strip().endswith(".md") else link.strip() + ".md"
+        named += [log.parent / name] + sorted(log.parent.rglob(Path(name).name))
+    files = list(dict.fromkeys(p.resolve() for p in named if p.is_file()))
+    for path in files:
+        hits = [b for b in blocks(read_text(path)) if block_id(b) == cid]
+        if len(hits) == 1:
+            return (path, hits[0]), ""
+    if "found" not in notes:
+        notes["found"] = conclusions([log.parent], [])
+    places = notes["found"].get(cid, [])
+    folder = _rel(log.parent, root) + "/"
+    if len(places) == 1:
+        return places[0], ""
+    if places:
+        names = ", ".join(sorted({_rel(p, root) for p, _ in places}))
+        return None, f"{cid} is under {len(places)} headings ({names})"
+    if files:
+        said = f"{cid} is not in {', '.join(_rel(p, root) for p in files)}, and "
+    else:
+        said = "the report the row names is not there, and " if named else ""
+    return None, f"{said}no heading has Id {cid} in {folder}"
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # Reading notes and stamps
 # ---------------------------------------------------------------------------------------------------------------
 
-def text_sha256(text: str) -> str:
-    """The hash of a conclusion's sentence: NFC, runs of the six layout characters to one space, trimmed."""
+def normalise(text: str) -> str:
+    """NFC, runs of the six layout characters to one space, trimmed."""
     text = unicodedata.normalize("NFC", text)
-    text = re.sub("[\t\n\x0b\x0c\r ]+", " ", text).strip(" ")
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return re.sub("[\t\n\x0b\x0c\r ]+", " ", text).strip(" ")
+
+
+def text_sha256(text: str) -> str:
+    """The hash of a conclusion's sentence, normalised (`normalise`)."""
+    return hashlib.sha256(normalise(text).encode("utf-8")).hexdigest()
 
 
 def seal(id_: str, verdict: str, date: str, sha: str) -> str:

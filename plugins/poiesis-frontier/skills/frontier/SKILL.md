@@ -74,7 +74,8 @@ Frontier never edits these files; it writes only to `frontier/`.
 - Concepts that survive their experiments go to building (poiesis-ui, poiesis-ux, or the project's own work).
 
 Check the log with `python3 -I $S/experiments.py frontier/experiments.md`: open, overdue, kept, killed,
-inconclusive, and rows missing a kill criterion or with a kill criterion written after the start.
+inconclusive, and rows missing a kill criterion, with a kill criterion written after the start, or whose
+assumption, prediction or kill criterion differs from the concept's line.
 Check what concepts start from with `python3 -I $S/experiments.py gate frontier/<date>-<topic>.md --write`, and
 give ids with `python3 -I $S/experiments.py ids CN frontier` (`ST` for a study design, `E` for an experiment).
 Say what a sample can detect with `python3 -I $S/power.py` (`detect`, `power`, `n`, `count`, `two`, `see`, `rate`).
